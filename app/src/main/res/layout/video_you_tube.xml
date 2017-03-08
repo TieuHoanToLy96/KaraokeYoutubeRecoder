@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/video_you_tube"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.beotron.tieuhoan.kara_2.VideoYouTube">
+
+
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/videoYoutube"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="wrap_content"></com.google.android.youtube.player.YouTubePlayerView>
+
+            <LinearLayout
+                android:id="@+id/option"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#00ffffff"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_below="@+id/videoYoutube"
+                >
+
+                <Button
+                    android:id="@+id/btnRecoder"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_shape_image"
+                    android:text="Ghi âm"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btnMic"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_shape_image"
+                    android:text="Mic"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btnEqualizer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_shape_image"
+                    android:text="Equalizer"
+                    android:textAllCaps="false" />
+
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:layout_below="@+id/option"
+                android:footerDividersEnabled="true"
+                android:scrollbars="none"
+                android:touchscreenBlocksFocus="true"></ListView>
+
+</RelativeLayout>

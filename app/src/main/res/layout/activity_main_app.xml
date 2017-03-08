@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/idFrameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.beotron.tieuhoan.kara_2.MainApp">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/idCoorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/idAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="#03A9F4"
+            android:fitsSystemWindows="true"
+            app:elevation="0dp"
+            >
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/idToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"></android.support.v7.widget.Toolbar>
+
+
+            <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/idTabLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_below="@+id/toolBar"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:minHeight="?attr/actionBarSize"-->
+            <!--app:tabGravity="center"-->
+            <!--app:tabMode="scrollable"></android.support.design.widget.TabLayout>-->
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/idFrameFather"
+            android:layout_below="@+id/idAppBar"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent"></FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+</RelativeLayout>
