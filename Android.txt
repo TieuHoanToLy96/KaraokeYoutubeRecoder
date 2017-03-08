@@ -1,0 +1,18 @@
+Loading circle: 
+	Github : Nice loading animations for Android
+Tablayout : smart tablayout
+	Github
+//from string to parameter URL
+	Java URL encoding of query string parameters
+
+Hide keyboard
+	 if (view != null) {
+                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
+                }
+
+
+
+gesture android
+
+boom menu button
