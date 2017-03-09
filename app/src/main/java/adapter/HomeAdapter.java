@@ -3,6 +3,7 @@ package adapter;
 import android.app.Activity;
 import android.beotron.tieuhoan.kara_2.R;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,9 +92,6 @@ public class HomeAdapter extends BaseAdapter {
         Glide.with(context).load(song.getUrlImageThumb()).into(viewHolder.imageThumb);
 
         viewHolder.boomButtonMore.clearBuilders();
-//        for (int i = 0; i < viewHolder.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
-//            viewHolder.boomButtonMore.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
-//        }
 
         viewHolder.boomButtonMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +108,11 @@ public class HomeAdapter extends BaseAdapter {
                         public void onBoomButtonClick(int index) {
                             switch (index) {
                                 case 0: {
-//                                    if (!song.getFavorite()) {
+                                    if (!song.getFavorite()) {
                                         addToDataBase(sqLiteAsset, song);
+                                    }
 //                                    } else {
-//
+//                                        sqLiteAsset.deleteSong(song.getVideoId());
 //                                        Log.e("tieuhoan", "Xóa thành công");
 //                                    }
                                     break;
@@ -129,26 +128,29 @@ public class HomeAdapter extends BaseAdapter {
         return view;
     }
 
-public void  removeDataBase(){
+    public void removeDataBase() {
 
 
-}
+    }
+
+
     public void addToDataBase(SQLiteAsset sqLiteAsset, Song song) {
 
         final ArrayList<Song> songDatabase = sqLiteAsset.getAllSong();
         if (songDatabase.size() == 0) {
+            song.setFavorite(true);
             sqLiteAsset.addSong(song);
         } else {
             if (checkExist(songDatabase, song) == false) {
+                song.setFavorite(true);
                 sqLiteAsset.addSong(song);
             }
         }
-
-//        song.setFavorite(true);
+        Log.e("tieuhoan", "Thêm thành công");
         Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT);
-        for (int i = 0; i < songDatabase.size(); i++) {
-            Log.e("tieuhoan", sqLiteAsset.getAllSong().get(i).getVideoId());
-        }
+//        for (int i = 0; i < songDatabase.size(); i++) {
+//            Log.e("tieuhoan", sqLiteAsset.getAllSong().get(i).getVideoId());
+//        }
     }
 
 

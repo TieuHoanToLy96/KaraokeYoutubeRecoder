@@ -16,8 +16,8 @@ import model.Song;
  */
 
 public class SQLiteAsset extends SQLiteAssetHelper {
-    private static final String DATABASE_NAME = "favorite";
-    private static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "favorite";
+    public static final int DATABASE_VERSION = 1;
 
     public static final String ID = "ID";
     public static final String TITLE = "TITLE";
@@ -47,6 +47,7 @@ public class SQLiteAsset extends SQLiteAssetHelper {
         }
         return songs;
     }
+
     public int addSong(Song song) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -57,6 +58,13 @@ public class SQLiteAsset extends SQLiteAssetHelper {
         contentValues.put("VIDEOID", song.getVideoId());
         int result = (int) db.insert(SQLiteAsset.TABLE, "ID", contentValues);
         return result;
+    }
+
+
+    public boolean deleteSong(String name) {
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.delete(SQLiteAsset.DATABASE_NAME, SQLiteAsset.VIDEOID + "=" + name, null) > 0;
     }
 
 

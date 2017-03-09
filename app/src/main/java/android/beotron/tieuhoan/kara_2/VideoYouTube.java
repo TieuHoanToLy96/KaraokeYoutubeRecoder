@@ -1,6 +1,7 @@
 package android.beotron.tieuhoan.kara_2;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -66,6 +67,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         youTubePlayerView.initialize(HangSo.APP_KEY, this);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setUpListView() {
         listView = (ListView) findViewById(R.id.listView);
@@ -81,22 +83,6 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         playVideo = youTubePlayer;
         youTubePlayer.setShowFullscreenButton(true);
-        youTubePlayer.setPlaylistEventListener(new YouTubePlayer.PlaylistEventListener() {
-            @Override
-            public void onPrevious() {
-
-            }
-
-            @Override
-            public void onNext() {
-
-            }
-
-            @Override
-            public void onPlaylistEnded() {
-
-            }
-        });
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         youTubePlayer.cueVideo(song.getVideoId());
 
@@ -137,7 +123,6 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnMic: {
-
                 Toast.makeText(VideoYouTube.this, "click", Toast.LENGTH_SHORT).show();
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -147,6 +132,10 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
                     }
                 });
                 thread.start();
+                break;
+            }
+            case R.id.btnEqualizer: {
+
                 break;
             }
         }
