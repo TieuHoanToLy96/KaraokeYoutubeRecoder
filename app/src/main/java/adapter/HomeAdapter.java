@@ -110,12 +110,12 @@ public class HomeAdapter extends BaseAdapter {
                         public void onBoomButtonClick(int index) {
                             switch (index) {
                                 case 0: {
-                                    if (!song.getFavorite()) {
+//                                    if (!song.getFavorite()) {
                                         addToDataBase(sqLiteAsset, song);
-                                    } else {
-
-                                        Log.e("tieuhoan", "Xóa thành công");
-                                    }
+//                                    } else {
+//
+//                                        Log.e("tieuhoan", "Xóa thành công");
+//                                    }
                                     break;
                                 }
                             }
@@ -144,7 +144,7 @@ public void  removeDataBase(){
             }
         }
 
-        song.setFavorite(true);
+//        song.setFavorite(true);
         Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT);
         for (int i = 0; i < songDatabase.size(); i++) {
             Log.e("tieuhoan", sqLiteAsset.getAllSong().get(i).getVideoId());

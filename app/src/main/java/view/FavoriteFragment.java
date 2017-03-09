@@ -5,6 +5,7 @@ import android.beotron.tieuhoan.kara_2.R;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,7 @@ public class FavoriteFragment extends Fragment {
 
         SQLiteAsset sqLiteAsset = new SQLiteAsset(getActivity());
         songs = sqLiteAsset.getAllSong();
-
-
+        Log.e("fuck", "fuck");
     }
 
 
