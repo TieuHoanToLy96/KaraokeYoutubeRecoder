@@ -31,13 +31,7 @@ public class FavoriteFragment extends Fragment {
 
         SQLiteAsset sqLiteAsset = new SQLiteAsset(getActivity());
         songs = sqLiteAsset.getAllSong();
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
-        Log.e("fuck", "fuck");
+
     }
 
 
