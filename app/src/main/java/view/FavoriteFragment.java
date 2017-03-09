@@ -34,6 +34,10 @@ public class FavoriteFragment extends Fragment {
         Log.e("fuck", "fuck");
         Log.e("fuck", "fuck");
         Log.e("fuck", "fuck");
+        Log.e("fuck", "fuck");
+        Log.e("fuck", "fuck");
+        Log.e("fuck", "fuck");
+        Log.e("fuck", "fuck");
     }
 
 
