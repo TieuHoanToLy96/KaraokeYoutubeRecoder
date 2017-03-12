@@ -29,6 +29,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private YouTubePlayer playVideo;
     private boolean isFullScreen;
     private ListView listView;
+
     private Button btnRecoder, btnMic, btnEqualizer;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
