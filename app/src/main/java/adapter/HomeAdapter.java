@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import model.Song;
 import ulti.HangSo;
-import ulti.SQLiteAsset;
+import ulti.SQLiteHelper;
 
 
 /**
@@ -58,7 +58,7 @@ public class HomeAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View view = convertView;
         final ViewHolder viewHolder;
 
@@ -98,7 +98,7 @@ public class HomeAdapter extends BaseAdapter {
             }
         });
 
-        final SQLiteAsset sqLiteAsset = new SQLiteAsset(context);
+        final SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
         for (int i = 0; i < viewHolder.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
             final SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
                     .listener(new OnBMClickListener() {
@@ -107,16 +107,17 @@ public class HomeAdapter extends BaseAdapter {
                             switch (index) {
                                 case 0: {
                                     if (song.getIsFavorite().equals("false")) {
-                                        addToDataBase(sqLiteAsset, song);
+                                        addToDataBase(sqLiteHelper, song);
                                     } else {
-                                        for (int j = 0; j < sqLiteAsset.getAllSong().size(); j++) {
-                                            Log.e("tieuhoan", String.valueOf(sqLiteAsset.getAllSong().get(j).getVideoId()));
+                                        for (int j = 0; j < sqLiteHelper.getAllSong().size(); j++) {
+                                            Log.e("tieuhoan", String.valueOf(sqLiteHelper.getAllSong().get(j).getVideoId()));
                                         }
                                         Log.e("song", song.getVideoId());
 
-                                        for (int i = 0; i < sqLiteAsset.getAllSong().size(); i++) {
-                                            if (song.getVideoId().equalsIgnoreCase(sqLiteAsset.getAllSong().get(i).getVideoId())) {
-                                                sqLiteAsset.deleteSong(sqLiteAsset.getAllSong().get(i).getVideoId());
+                                        for (Song song : sqLiteHelper.getAllSong()) {
+                                            if (song.getVideoId().equalsIgnoreCase(song.getVideoId())) {
+                                                sqLiteHelper.deleteSong(song.getVideoId());
+                                                HomeAdapter.this.notifyDataSetChanged();
                                                 Log.e("tieuhoan", "Xóa thành công");
                                                 break;
                                             }
@@ -141,17 +142,17 @@ public class HomeAdapter extends BaseAdapter {
     }
 
 
-    public void addToDataBase(SQLiteAsset sqLiteAsset, Song song) {
+    public void addToDataBase(SQLiteHelper sqLiteHelper, Song song) {
 
-        final ArrayList<Song> songDatabase = sqLiteAsset.getAllSong();
+        final ArrayList<Song> songDatabase = sqLiteHelper.getAllSong();
         if (songDatabase.size() == 0) {
             song.setIsFavorite("true");
-            sqLiteAsset.addSong(song);
+            sqLiteHelper.addSong(song);
             Log.e("tieuhoan", "Thêm thành công");
         } else {
             if (checkExist(songDatabase, song) == false) {
                 song.setIsFavorite("true");
-                sqLiteAsset.addSong(song);
+                sqLiteHelper.addSong(song);
                 Log.e("tieuhoan", "Thêm thành công");
             }
         }

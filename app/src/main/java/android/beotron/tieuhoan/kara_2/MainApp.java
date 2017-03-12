@@ -25,10 +25,12 @@ import view.FavoriteFragment;
 import view.HomeFragment;
 import view.SearchFragment;
 import view.SingerFragment;
+import view.SingerGlobal;
+import view.SingerVietNam;
 import view.ViewPageFragment;
 
 
-public class MainApp extends AppCompatActivity {
+public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     private Toolbar toolbar;
     private MenuItem searchItem, menuItem;
@@ -37,7 +39,8 @@ public class MainApp extends AppCompatActivity {
     Json.Load load;
     ArrayList<Song> songs;
     public static HomeFragment homeFragment;
-    public static SingerFragment singerFragment;
+    public static SingerFragment singersVietNam;
+    public static SingerFragment singersGlobal;
     public static SearchFragment searchFragment;
     public static FavoriteFragment favoriteFragment;
 
@@ -93,16 +96,29 @@ public class MainApp extends AppCompatActivity {
 
 
         homeFragment = new HomeFragment();
-        singerFragment = new SingerFragment();
+        singersVietNam = new SingerVietNam();
+        singersGlobal = new SingerGlobal();
         searchFragment = new SearchFragment();
         favoriteFragment = new FavoriteFragment();
 
         toolbar = (Toolbar) findViewById(R.id.idToolBar);
         toolbar.setTitle("Béo Tròn");
         setSupportActionBar(toolbar);
+
+
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            Log.e("Home pressed", "tieuhoan");
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
 
@@ -122,26 +138,17 @@ public class MainApp extends AppCompatActivity {
 
 
         //set up item
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Toast.makeText(MainApp.this, "click", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+
         searchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getComponentName()));
 
         searchView.setSubmitButtonEnabled(true);
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void onClick(View v) {
                 FragmentControl.goToFragmentAddBackStack(R.id.idFrameFather, searchFragment, MainApp.this, getClass().getName());
             }
         });
-
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -168,5 +175,13 @@ public class MainApp extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+
+        }
+        return true;
     }
 }

@@ -35,7 +35,7 @@ import ulti.ReaderJson;
  * Created by TieuHoan on 26/02/2017.
  */
 
-public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener, AbsListView.OnScrollListener {
+public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private ListView listView;
     private ArrayList<Song> songsResult;
@@ -76,7 +76,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == HangSo.KEY_HANDLER) {
-                songsResult = (ArrayList<Song>) ((ArrayList<Song>) msg.obj).clone();
+                songsResult = ((ArrayList<Song>) msg.obj);
                 if (songsResult != null) {
                     setUpListView();
                 }
@@ -84,7 +84,6 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         }
     };
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setUpListView() {
         homeAdapter = new HomeAdapter(getActivity(), songsResult);
         listView = (ListView) view.findViewById(R.id.idSongResultSearch);
@@ -100,8 +99,9 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 startActivity(intent);
             }
         });
-        listView.setNestedScrollingEnabled(true);
-        listView.setOnScrollListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listView.setNestedScrollingEnabled(true);
+        }
     }
 
     @Override
@@ -115,7 +115,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         }
 
         try {
-            pathSearch = HangSo.API_URI2 + "&maxResults=10" + "&q=" + URLEncoder.encode("Karaoke" + query, "UTF-8") + "&type=video" + "&key=" + HangSo.KEY_BROWSE;
+            pathSearch = HangSo.API_URI2 + "&maxResults=20" + "&q=" + URLEncoder.encode("Karaoke" + query, "UTF-8") + "&type=video" + "&key=" + HangSo.KEY_BROWSE;
             Log.e("pathJson result", pathSearch);
             new Json.Load(handler, getContext()).execute(pathSearch);
         } catch (UnsupportedEncodingException e) {
@@ -132,10 +132,10 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         String test;
         try {
             test = "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=" + URLEncoder.encode(newText, "UTF-8");
-            Log.e("test", test);
+//            Log.e("test", test);
 //            test = "http://suggestqueries.google.com/complete/search?q="+ URLEncoder.encode(newText, "UTF-8") +"&client=toolbar&hl=vie&ds=yt";
-            String json = ReaderJson.readerJson(test);
-            Log.e("json", json);
+//            String json = ReaderJson.readerJson(test);
+//            Log.e("json", json);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -146,25 +146,25 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     int i = 0;
     private int lastVisibleItem;
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+//    @Override
+//    public void onScrollStateChanged(AbsListView view, int scrollState) {
+//
+//    }
 
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (lastVisibleItem < firstVisibleItem) {
-            Log.i("SCROLLING DOWN", "TRUE");
-            if (songsResult.size() >= (i + 10)) {
-                new Json.LoadAdd(handler2, listView, getActivity()).execute();
-                i = i + 10;
-            }
-        }
-        if (lastVisibleItem > firstVisibleItem) {
-            Log.i("SCROLLING UP", "TRUE");
-        }
-        lastVisibleItem = firstVisibleItem;
-    }
+//    @Override
+//    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//        if (lastVisibleItem < firstVisibleItem) {
+//            Log.i("SCROLLING DOWN", "TRUE");
+//            if (songsResult.size() >= (i + 10)) {
+//                new Json.LoadAdd(handler2, listView, getActivity()).execute();
+//                i = i + 10;
+//            }
+//        }
+//        if (lastVisibleItem > firstVisibleItem) {
+//            Log.i("SCROLLING UP", "TRUE");
+//        }
+//        lastVisibleItem = firstVisibleItem;
+//    }
 
     Handler handler2 = new Handler() {
         @Override

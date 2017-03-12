@@ -68,13 +68,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     };
 
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setUpListView(ArrayList<Song> songs, View view) {
         homeAdapter = new HomeAdapter(getActivity(), songs);
         listView = (ListView) view.findViewById(R.id.idListViewHome);
         listView.setAdapter(homeAdapter);
         listView.setOnItemClickListener(this);
-        listView.setNestedScrollingEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listView.setNestedScrollingEnabled(true);
+        }
         listView.setOnScrollListener(this);
     }
 

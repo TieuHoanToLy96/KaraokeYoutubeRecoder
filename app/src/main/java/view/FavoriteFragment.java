@@ -15,12 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import adapter.HomeAdapter;
 import model.Song;
-import ulti.SQLiteAsset;
+import ulti.SQLiteHelper;
 
 /**
  * Created by TieuHoan on 09/03/2017.
@@ -33,11 +31,8 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.e("tieuhoan", "onCreate FavoriteFragment");
-        SQLiteAsset sqLiteAsset = new SQLiteAsset(getActivity());
-        songs = sqLiteAsset.getAllSong();
-
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
+        songs = sqLiteHelper.getAllSong();
 
     }
 

@@ -33,7 +33,8 @@ public class SQLiteAsset extends SQLiteAssetHelper {
 
     public static final String NAMESINGER = "NAMESINGER";
     public static final String IMAGESINGER = "IMAGESINGER";
-    public static final String TABLESINGER = "SINGER";
+    public static final String TABLESINGERVIETNAM = "SINGERVIETNAM";
+    public static final String TABLESINGERGLOBAL = "SINGERGLOBAL";
 
     public SQLiteAsset(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,28 +58,28 @@ public class SQLiteAsset extends SQLiteAssetHelper {
         return songs;
     }
 
-    public ArrayList<Singer> getAllSinger() {
-        ArrayList<Singer> singers = new ArrayList<>();
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String colums[] = {SQLiteAsset.NAMESINGER, SQLiteAsset.IMAGESINGER};
-        Cursor cursor = sqLiteDatabase.query(SQLiteAsset.TABLESINGER, colums, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            Singer singer = new Singer();
-            singer.setNameSinger(cursor.getString(cursor.getColumnIndex(SQLiteAsset.NAMESINGER)));
-            singer.setImageSinger(cursor.getString(cursor.getColumnIndex(SQLiteAsset.IMAGESINGER)));
-            singers.add(singer);
-        }
-        return singers;
-    }
+//    public ArrayList<Singer> getAllSinger() {
+//        ArrayList<Singer> singers = new ArrayList<>();
+//        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+//        String colums[] = {SQLiteAsset.NAMESINGER, SQLiteAsset.IMAGESINGER};
+//        Cursor cursor = sqLiteDatabase.query(SQLiteAsset.TABLESINGER, colums, null, null, null, null, null);
+//        while (cursor.moveToNext()) {
+//            Singer singer = new Singer();
+//            singer.setNameSinger(cursor.getString(cursor.getColumnIndex(SQLiteAsset.NAMESINGER)));
+//            singer.setImageSinger(cursor.getString(cursor.getColumnIndex(SQLiteAsset.IMAGESINGER)));
+//            singers.add(singer);
+//        }
+//        return singers;
+//    }
 
-    public int addSinger(Singer singer) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLiteAsset.NAMESINGER, singer.getNameSinger());
-        contentValues.put(SQLiteAsset.IMAGESINGER, singer.getImageSinger());
-        int result = (int) db.insert(SQLiteAsset.TABLESINGER, null, contentValues);
-        return result;
-    }
+//    public int addSinger(Singer singer) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(SQLiteAsset.NAMESINGER, singer.getNameSinger());
+//        contentValues.put(SQLiteAsset.IMAGESINGER, singer.getImageSinger());
+//        int result = (int) db.insert(SQLiteAsset.TABLESINGER, null, contentValues);
+//        return result;
+//    }
 
     public int addSong(Song song) {
         SQLiteDatabase db = this.getWritableDatabase();

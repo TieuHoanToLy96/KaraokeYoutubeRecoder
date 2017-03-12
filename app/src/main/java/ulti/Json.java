@@ -86,7 +86,7 @@ public class Json {
         protected void onPreExecute() {
             super.onPreExecute();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.dialog_process, null) ;
+            view = inflater.inflate(R.layout.dialog_process, null);
             listView.addFooterView(view);
         }
 
@@ -110,7 +110,6 @@ public class Json {
             message.what = HangSo.KEY_HANDLER2;
             message.obj = songs;
             handler.sendMessage(message);
-
             listView.removeFooterView(view);
         }
     }

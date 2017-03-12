@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +31,19 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
     private SmartTabLayout tabLayout;
     private Toolbar toolbar;
     private ArrayList<Singer> singers;
-    private boolean oneClickSinger;
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         singers = new ArrayList<>();
         toolbar = (Toolbar) getActivity().findViewById(R.id.idToolBar);
+
+
     }
 
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.viewpage_fragment, null);
         setUpViewPAger(view);
         return view;
@@ -57,11 +58,14 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
         fragments.add(MainApp.homeFragment);
         fragmentTitles.add("Home");
 
-        fragments.add(MainApp.singerFragment);
-        fragmentTitles.add("Nghệ sĩ");
+        fragments.add(MainApp.singersVietNam);
+        fragmentTitles.add("Việt Nam");
+        fragments.add(MainApp.singersGlobal);
+        fragmentTitles.add("Âu Mỹ");
 
-        fragments.add(MainApp.favoriteFragment) ;
-        fragmentTitles.add("Yêu thích") ;
+        fragments.add(MainApp.favoriteFragment);
+        fragmentTitles.add("Yêu thích");
+
 
         viewPager = (ViewPager) view.findViewById(R.id.idViewPager);
         TabLayoutAdapter tabLayoutAdapter = new TabLayoutAdapter(getChildFragmentManager(), fragments, fragmentTitles);
@@ -76,6 +80,7 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+
     }
 
     @Override
@@ -83,10 +88,29 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
         switch (position) {
             case 0: {
                 toolbar.setTitle(fragmentTitles.get(0));
+
+
                 break;
             }
             case 1: {
                 toolbar.setTitle(fragmentTitles.get(1));
+//                Bundle bundle = new Bundle();
+//                SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
+//                singers = sqLiteHelper.getAllSinger();
+//                for (Singer singer : sqLiteHelper.getAllSinger()) {
+//                    Log.e("tieuhoan ", singer.getNameSinger());
+//                }
+//                bundle.putSerializable("SINGER", singers);
+//                MainApp.singerFragment.setArguments(bundle);
+                break;
+            }
+            case 2: {
+                toolbar.setTitle(fragmentTitles.get(2));
+                break;
+            }
+
+            case 3: {
+                toolbar.setTitle(fragmentTitles.get(3));
                 break;
             }
 
