@@ -14,16 +14,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import adapter.HomeAdapter;
 import model.Song;
-import service.SQLiteAsset;
+import ulti.SQLiteAsset;
 
 /**
  * Created by TieuHoan on 09/03/2017.
@@ -37,16 +34,10 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        Log.e("tieuhoan", "onCreate FavoriteFragment");
         SQLiteAsset sqLiteAsset = new SQLiteAsset(getActivity());
         songs = sqLiteAsset.getAllSong();
 
-        Collections.sort(songs, new Comparator<Song>() {
-            @Override
-            public int compare(Song o1, Song o2) {
-                return o1.getTittle().compareTo(o2.getTittle());
-            }
-        });
 
     }
 

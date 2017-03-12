@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 import adapter.HomeAdapter;
 import model.Song;
-import service.HangSo;
-import service.Recoder;
+import ulti.HangSo;
+import ulti.Recoder;
 
 public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, AdapterView.OnItemClickListener,
         View.OnClickListener {

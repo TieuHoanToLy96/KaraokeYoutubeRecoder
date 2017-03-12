@@ -1,4 +1,4 @@
-package service;
+package ulti;
 
 import android.app.Dialog;
 import android.beotron.tieuhoan.kara_2.R;
@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 import model.Song;
 
-import static service.Json.Load.songs;
-import static service.Json.Load.stringJson;
-import static service.ReaderJson.getJsonObjectPlayList;
+import static ulti.Json.Load.songs;
+import static ulti.Json.Load.stringJson;
+import static ulti.ReaderJson.getJsonObjectPlayList;
 
 
 /**

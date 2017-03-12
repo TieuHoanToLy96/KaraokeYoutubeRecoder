@@ -13,33 +13,19 @@ public class Song implements Serializable {
     private String timeUpLoad;
     private String urlImageThumb;
     private String videoId;
-    private boolean isFavorite ;
-
-    public boolean getFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
+    private String isFavorite;
 
     public Song() {
+        this.isFavorite = "false";
     }
 
-    public Song(String tittle, String videoId, String nameChannel, String timeUpLoad, String urlImageThumb) {
+    public Song(String tittle, String nameChannel, String timeUpLoad, String urlImageThumb, String videoId, String isFavorite) {
         this.tittle = tittle;
-        this.videoId = videoId;
         this.nameChannel = nameChannel;
         this.timeUpLoad = timeUpLoad;
         this.urlImageThumb = urlImageThumb;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
         this.videoId = videoId;
+        this.isFavorite = isFavorite;
     }
 
     public String getTittle() {
@@ -74,5 +60,19 @@ public class Song implements Serializable {
         this.urlImageThumb = urlImageThumb;
     }
 
+    public String getVideoId() {
+        return videoId;
+    }
 
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+    }
+
+    public String getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(String isFavorite) {
+        this.isFavorite = isFavorite;
+    }
 }

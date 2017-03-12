@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.beotron.tieuhoan.kara_2.MainApp;
 import android.beotron.tieuhoan.kara_2.R;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,9 @@ import java.util.ArrayList;
 
 import adapter.SingerAdapter;
 import model.Singer;
-import service.FragmentControl;
-import service.HangSo;
+import ulti.FragmentControl;
+import ulti.HangSo;
+import ulti.SQLiteAsset;
 
 /**
  * Created by TieuHoan on 24/02/2017.
@@ -33,24 +36,29 @@ public class SingerFragment extends Fragment implements AdapterView.OnItemClickL
     private Context context;
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
 
     }
 
 
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.artist_fragment, null);
-        singers = new ArrayList<>();
-        for (int j = 0; j < HangSo.listSinger.length; j++) {
-            Singer singer = new Singer();
-            singer.setImageSinger(HangSo.listSinger[j][0]);
-            singer.setNameSinger(HangSo.listSinger[j][1]);
-            singers.add(singer);
+
+        SQLiteAsset sqLiteAsset = new SQLiteAsset(context);
+        singers = sqLiteAsset.getAllSinger();
+//        for (int j = 0; j < HangSo.listSinger.length; j++) {
+//            Singer singer = new Singer();
+//            singer.setImageSinger(HangSo.listSinger[j][0]);
+//            singer.setNameSinger(HangSo.listSinger[j][1]);
+//            sqLiteAsset.addSinger(singer);
+////            singers.add(singer);
+//        }
+              for (Singer singer : sqLiteAsset.getAllSinger()) {
+            Log.e("tieuhoan", singer.getNameSinger());
         }
 
         SingerAdapter singerAdapter = new SingerAdapter(context, singers);

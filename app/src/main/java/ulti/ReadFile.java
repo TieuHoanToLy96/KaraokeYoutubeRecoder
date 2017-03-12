@@ -1,7 +1,6 @@
-package service;
+package ulti;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

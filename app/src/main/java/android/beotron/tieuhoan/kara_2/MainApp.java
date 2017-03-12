@@ -2,7 +2,6 @@ package android.beotron.tieuhoan.kara_2;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,9 +18,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import model.Song;
-import service.FragmentControl;
-import service.HangSo;
-import service.Json;
+import ulti.FragmentControl;
+import ulti.HangSo;
+import ulti.Json;
 import view.FavoriteFragment;
 import view.HomeFragment;
 import view.SearchFragment;
@@ -99,7 +98,7 @@ public class MainApp extends AppCompatActivity {
         favoriteFragment = new FavoriteFragment();
 
         toolbar = (Toolbar) findViewById(R.id.idToolBar);
-        toolbar.setTitle("KaraokeTieuhoan");
+        toolbar.setTitle("Béo Tròn");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);

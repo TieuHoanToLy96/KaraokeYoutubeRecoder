@@ -1,4 +1,4 @@
-package service;
+package ulti;
 
 import android.beotron.tieuhoan.kara_2.R;
 import android.graphics.Color;
@@ -84,9 +84,9 @@ public class BuilderManager {
                     .pieceColor(Color.WHITE);
         }
 
-        private static service.BuilderManager ourInstance = new service.BuilderManager();
+        private static ulti.BuilderManager ourInstance = new ulti.BuilderManager();
 
-        public static service.BuilderManager getInstance() {
+        public static ulti.BuilderManager getInstance() {
             return ourInstance;
         }
 

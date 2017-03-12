@@ -3,7 +3,6 @@ package adapter;
 import android.app.Activity;
 import android.beotron.tieuhoan.kara_2.R;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
@@ -23,8 +21,8 @@ import com.nightonke.boommenu.BoomMenuButton;
 import java.util.ArrayList;
 
 import model.Song;
-import service.HangSo;
-import service.SQLiteAsset;
+import ulti.HangSo;
+import ulti.SQLiteAsset;
 
 
 /**
@@ -108,13 +106,22 @@ public class HomeAdapter extends BaseAdapter {
                         public void onBoomButtonClick(int index) {
                             switch (index) {
                                 case 0: {
-                                    if (!song.getFavorite()) {
+                                    if (song.getIsFavorite().equals("false")) {
                                         addToDataBase(sqLiteAsset, song);
+                                    } else {
+                                        for (int j = 0; j < sqLiteAsset.getAllSong().size(); j++) {
+                                            Log.e("tieuhoan", String.valueOf(sqLiteAsset.getAllSong().get(j).getVideoId()));
+                                        }
+                                        Log.e("song", song.getVideoId());
+
+                                        for (int i = 0; i < sqLiteAsset.getAllSong().size(); i++) {
+                                            if (song.getVideoId().equalsIgnoreCase(sqLiteAsset.getAllSong().get(i).getVideoId())) {
+                                                sqLiteAsset.deleteSong(sqLiteAsset.getAllSong().get(i).getVideoId());
+                                                Log.e("tieuhoan", "Xóa thành công");
+                                                break;
+                                            }
+                                        }
                                     }
-//                                    } else {
-//                                        sqLiteAsset.deleteSong(song.getVideoId());
-//                                        Log.e("tieuhoan", "Xóa thành công");
-//                                    }
                                     break;
                                 }
                             }
@@ -138,19 +145,18 @@ public class HomeAdapter extends BaseAdapter {
 
         final ArrayList<Song> songDatabase = sqLiteAsset.getAllSong();
         if (songDatabase.size() == 0) {
-            song.setFavorite(true);
+            song.setIsFavorite("true");
             sqLiteAsset.addSong(song);
+            Log.e("tieuhoan", "Thêm thành công");
         } else {
             if (checkExist(songDatabase, song) == false) {
-                song.setFavorite(true);
+                song.setIsFavorite("true");
                 sqLiteAsset.addSong(song);
+                Log.e("tieuhoan", "Thêm thành công");
             }
         }
-        Log.e("tieuhoan", "Thêm thành công");
-        Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT);
-//        for (int i = 0; i < songDatabase.size(); i++) {
-//            Log.e("tieuhoan", sqLiteAsset.getAllSong().get(i).getVideoId());
-//        }
+
+
     }
 
 
