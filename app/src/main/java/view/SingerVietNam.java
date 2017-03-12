@@ -22,6 +22,7 @@ import ulti.SQLiteHelper;
 
 public class SingerVietNam extends SingerFragment {
 
+    static boolean check = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,12 @@ public class SingerVietNam extends SingerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.singer_fragment, null);
-
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
-
+        if (check) {
+            SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
+            singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
+            setUpListView(view);
+            check = false;
+        }
 //        for (int i = 0; i < HangSo.listSingerVietNam.length; i++) {
 //            Singer singer = new Singer();
 //            singer.setImageSinger(HangSo.listSingerVietNam[i][0]);
@@ -45,8 +49,7 @@ public class SingerVietNam extends SingerFragment {
 //            sqLiteHelper.addSinger(singer, SQLiteHelper.TABLESINGERVIETNAM);
 //        }
 
-        singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
-        setUpListView(view);
+
         return view;
 
     }

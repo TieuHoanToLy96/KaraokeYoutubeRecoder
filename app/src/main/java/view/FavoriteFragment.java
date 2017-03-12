@@ -2,12 +2,10 @@ package view;
 
 import android.annotation.TargetApi;
 import android.beotron.tieuhoan.kara_2.R;
-import android.beotron.tieuhoan.kara_2.VideoYouTube;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

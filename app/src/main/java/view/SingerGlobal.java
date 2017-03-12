@@ -24,11 +24,20 @@ public class SingerGlobal extends SingerFragment {
         context = getActivity();
     }
 
+    static boolean check = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.singer_fragment, null);
 
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
+        if (check) {
+            SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
+            singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERGLOBAL);
+            setUpListView(view);
+            Log.e("Tieuhoan", "one global");
+            check = false;
+        }
+
 //        for (int i = 0; i < HangSo.listSingerGlobal.length; i++) {
 //            Singer singer = new Singer();
 //            singer.setImageSinger(HangSo.listSingerGlobal[i][0]);
@@ -36,8 +45,7 @@ public class SingerGlobal extends SingerFragment {
 //            Log.e("tieuhoan ", singer.getNameSinger());
 //            sqLiteHelper.addSinger(singer, SQLiteHelper.TABLESINGERGLOBAL);
 //        }
-        singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERGLOBAL);
-        setUpListView(view);
+
 
         return view;
 

@@ -1,7 +1,6 @@
 package android.beotron.tieuhoan.kara_2;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -29,16 +28,15 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private YouTubePlayer playVideo;
     private boolean isFullScreen;
     private ListView listView;
-
     private Button btnRecoder, btnMic, btnEqualizer;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.video_you_tube);
+
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        setContentView(R.layout.video_you_tube);
         playVideo();
         setUpButton();
         setUpListView();
@@ -62,13 +60,13 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         youTubePlayerView.initialize(HangSo.APP_KEY, this);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setUpListView() {
         listView = (ListView) findViewById(R.id.listView);
         HomeAdapter popularAdapter = new HomeAdapter(this, songs);
         listView.setAdapter(popularAdapter);
-        listView.setNestedScrollingEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listView.setNestedScrollingEnabled(true);
+        }
         listView.setOnItemClickListener(this);
     }
 

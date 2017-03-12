@@ -1,6 +1,5 @@
 package view;
 
-import android.annotation.TargetApi;
 import android.beotron.tieuhoan.kara_2.MainApp;
 import android.beotron.tieuhoan.kara_2.R;
 import android.beotron.tieuhoan.kara_2.VideoYouTube;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -29,7 +27,6 @@ import adapter.HomeAdapter;
 import model.Song;
 import ulti.HangSo;
 import ulti.Json;
-import ulti.ReaderJson;
 
 /**
  * Created by TieuHoan on 26/02/2017.
