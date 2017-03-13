@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
 import java.util.ArrayList;
 
 import adapter.HomeAdapter;
@@ -51,13 +56,15 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     public void playVideo() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+
         if (bundle != null) {
             song = (Song) bundle.getSerializable("SONG");
             songs = (ArrayList<Song>) bundle.getSerializable("SONGS");
         }
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.videoYoutube);
-        youTubePlayerView.initialize(HangSo.APP_KEY, this);
+        youTubePlayerView.initialize(HangSo.APP_KEY, VideoYouTube.this);
+
     }
 
     public void setUpListView() {
@@ -76,8 +83,11 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         playVideo = youTubePlayer;
         youTubePlayer.setShowFullscreenButton(true);
+        youTubePlayer.loadVideo(song.getVideoId());
+        youTubePlayer.play();
+//        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
-        youTubePlayer.cueVideo(song.getVideoId());
+
         youTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
             @Override
             public void onFullscreen(boolean b) {
@@ -108,7 +118,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        playVideo.cueVideo(songs.get(i).getVideoId());
+        playVideo.loadVideo(songs.get(i).getVideoId());
     }
 
     @Override

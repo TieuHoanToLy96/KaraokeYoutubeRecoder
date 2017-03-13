@@ -17,6 +17,9 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import java.util.ArrayList;
 
 import model.Singer;
+import ulti.SQLiteHelper;
+
+import static view.ReaderViewPagerTransformer.*;
 
 /**
  * Created by TieuHoan on 25/02/2017.
@@ -70,6 +73,7 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
         viewPager = (ViewPager) view.findViewById(R.id.idViewPager);
         TabLayoutAdapter tabLayoutAdapter = new TabLayoutAdapter(getChildFragmentManager(), fragments, fragmentTitles);
         viewPager.setAdapter(tabLayoutAdapter);
+        viewPager.setPageTransformer(true, new ReaderViewPagerTransformer(TransformType.ZOOM));
         tabLayout = (SmartTabLayout) view.findViewById(R.id.idTabLayout);
         tabLayout.setViewPager(viewPager);
         tabLayout.setOnPageChangeListener(this);
@@ -96,12 +100,12 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
                 toolbar.setTitle(fragmentTitles.get(1));
 //                Bundle bundle = new Bundle();
 //                SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
-//                singers = sqLiteHelper.getAllSinger();
-//                for (Singer singer : sqLiteHelper.getAllSinger()) {
+//                singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
+//                for (Singer singer : sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM)) {
 //                    Log.e("tieuhoan ", singer.getNameSinger());
 //                }
-//                bundle.putSerializable("SINGER", singers);
-//                MainApp.singerFragment.setArguments(bundle);
+//                bundle.putSerializable("SINGER_VIETNAM", singers);
+//                MainApp.singersVietNam.setArguments(bundle);
                 break;
             }
             case 2: {
@@ -118,8 +122,17 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
 }
 

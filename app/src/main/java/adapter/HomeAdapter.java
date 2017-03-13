@@ -112,10 +112,12 @@ public class HomeAdapter extends BaseAdapter {
                                         for (int j = 0; j < sqLiteHelper.getAllSong().size(); j++) {
                                             Log.e("tieuhoan", String.valueOf(sqLiteHelper.getAllSong().get(j).getVideoId()));
                                         }
+
                                         Log.e("song", song.getVideoId());
 
-                                        for (Song song : sqLiteHelper.getAllSong()) {
-                                            if (song.getVideoId().equalsIgnoreCase(song.getVideoId())) {
+                                        for (Song song1 : sqLiteHelper.getAllSong()) {
+                                            if (song.getVideoId().equalsIgnoreCase(song1.getVideoId())) {
+
                                                 sqLiteHelper.deleteSong(song.getVideoId());
                                                 HomeAdapter.this.notifyDataSetChanged();
                                                 Log.e("tieuhoan", "Xóa thành công");

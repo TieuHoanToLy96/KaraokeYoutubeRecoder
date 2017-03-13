@@ -23,26 +23,27 @@ public class Recoder {
 
     public void startRecoder() {
         try {
-//            bufferSizeRecord = AudioRecord.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING);
-//            bufferSizeTrack = AudioTrack.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING);
+            bufferSizeRecord = AudioRecord.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING);
+            bufferSizeTrack = AudioTrack.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING);
 //
-//            record = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING, bufferSizeRecord);
-//            track = new AudioTrack(AudioManager.STREAM_MUSIC, HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING, bufferSizeTrack, AudioTrack.MODE_STREAM);
+            record = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING, bufferSizeRecord);
+            track = new AudioTrack(AudioManager.STREAM_MUSIC, HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING, bufferSizeTrack, AudioTrack.MODE_STREAM);
 //
-//            record.startRecording();
-//            track.play();
-//            checkRecord = true;
+            record.startRecording();
+            Log.e("tieuhoan", String.valueOf(bufferSizeRecord));
+            Log.e("tieuhoan", String.valueOf(bufferSizeTrack));
+//            if( == AudioRecord.ERROR_BAD_VALUE)
+            track.play();
+            checkRecord = true;
 //
 //
-//            Thread thread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    playStream();
-//                }
-//            });
-//            thread.start();
-
-            record = findAudioRecord();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    playStream();
+                }
+            });
+            thread.start();
 
 
 //            audioData = new short[bufferSizeRecord / 2];
@@ -67,37 +68,37 @@ public class Recoder {
 
     private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
 
-    public AudioRecord findAudioRecord() {
-        AudioRecord recorder = null;
-        for (int rate : mSampleRates) {
-            for (short audioFormat : new short[]{AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT}) {
-                for (short channelConfig : new short[]{AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO}) {
-                    try {
-                        Log.w("DEBUG", "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
-                                + channelConfig);
-                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
-
-                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
-                            // check if we can instantiate and have a success
-                            recorder = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, channelConfig, audioFormat, bufferSize);
-
-                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
-                                return recorder;
-                        }
-                    } catch (Exception e) {
-                        Log.w("DEBUG", rate + "Exception, keep trying.", e);
-                    } finally {
-                        if (recorder != null) {
-                            recorder.stop();
-                            recorder.release();
-                        }
-                    }
-
-                }
-            }
-        }
-        return null;
-    }
+//    public AudioRecord findAudioRecord() {
+//        AudioRecord recorder = null;
+//        for (int rate : mSampleRates) {
+//            for (short audioFormat : new short[]{AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT}) {
+//                for (short channelConfig : new short[]{AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO}) {
+//                    try {
+//                        Log.w("DEBUG", "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
+//                                + channelConfig);
+//                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
+//
+//                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
+//                            // check if we can instantiate and have a success
+//                            recorder = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, channelConfig, audioFormat, bufferSize);
+//
+//                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+//                                return recorder;
+//                        }
+//                    } catch (Exception e) {
+//                        Log.w("DEBUG", rate + "Exception, keep trying.", e);
+//                    } finally {
+//                        if (recorder != null) {
+//                            recorder.stop();
+//                            recorder.release();
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 
     public boolean isRecoding() {
