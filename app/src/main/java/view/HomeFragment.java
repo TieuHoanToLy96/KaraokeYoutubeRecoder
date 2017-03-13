@@ -1,6 +1,7 @@
 package view;
 
 import android.beotron.tieuhoan.kara_2.R;
+import android.beotron.tieuhoan.kara_2.VideoYouTube;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
