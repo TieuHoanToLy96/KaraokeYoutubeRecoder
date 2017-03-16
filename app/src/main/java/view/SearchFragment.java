@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,14 +36,14 @@ import ulti.Json;
 
 public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private ArrayList<Song> songsResult;
     private View view;
     private String pathSearch;
     private HomeAdapter homeAdapter;
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
@@ -54,7 +56,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.search_fragment, null);
 
         if (pathSearch != null) {
@@ -75,19 +77,21 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
             if (msg.what == HangSo.KEY_HANDLER) {
                 songsResult = ((ArrayList<Song>) msg.obj);
                 if (songsResult != null) {
-                    setUpListView();
+                    setUpRecycle();
                 }
             }
         }
     };
 
-    public void setUpListView() {
-        homeAdapter = new HomeAdapter(getActivity(), songsResult);
-        listView = (ListView) view.findViewById(R.id.idSongResultSearch);
-        listView.setAdapter(homeAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public void setUpRecycle() {
+        homeAdapter = new HomeAdapter(songsResult, getActivity());
+        recyclerView = (RecyclerView) view.findViewById(R.id.idSongResultSearch);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        homeAdapter.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void OnItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("SONG", songsResult.get(i));
                 bundle.putSerializable("SONGS", songsResult);
@@ -96,10 +100,28 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 startActivity(intent);
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            listView.setNestedScrollingEnabled(true);
-        }
+
     }
+
+//    public void setUpListView() {
+//        homeAdapter = new HomeAdapter(getActivity(), songsResult);
+//        listView = (ListView) view.findViewById(R.id.idSongResultSearch);
+//        listView.setAdapter(homeAdapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("SONG", songsResult.get(i));
+//                bundle.putSerializable("SONGS", songsResult);
+//                Intent intent = new Intent(getActivity(), VideoYouTube.class);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            }
+//        });
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            listView.setNestedScrollingEnabled(true);
+//        }
+//    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {

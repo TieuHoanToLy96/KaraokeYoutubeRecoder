@@ -1,12 +1,12 @@
 package view;
 
-import android.annotation.TargetApi;
 import android.beotron.tieuhoan.kara_2.R;
 import android.beotron.tieuhoan.kara_2.VideoYouTube;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +19,15 @@ import adapter.HomeAdapter;
 import model.Song;
 import ulti.SQLiteHelper;
 
+import static android.beotron.tieuhoan.kara_2.R.id.listView;
+
 /**
  * Created by TieuHoan on 09/03/2017.
  */
 
-public class FavoriteFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class FavoriteFragment extends Fragment implements HomeAdapter.OnItemClickRecycle {
     private ArrayList<Song> songs;
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,21 +38,23 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
     }
 
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorite_fragment, null);
-        listView = (ListView) view.findViewById(R.id.idListViewFavorite);
-        HomeAdapter homeAdapter = new HomeAdapter(getActivity(), songs);
-        listView.setAdapter(homeAdapter);
-        listView.setNestedScrollingEnabled(true);
-        listView.setOnItemClickListener(this);
+
+        HomeAdapter homeAdapter = new HomeAdapter(songs, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.idListViewFavorite);
+        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        homeAdapter.setOnItemClickRecycle(this);
+
         return view;
     }
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void OnItemClick(View view, int position) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("SONG", songs.get(position));
         bundle.putSerializable("SONGS", songs);

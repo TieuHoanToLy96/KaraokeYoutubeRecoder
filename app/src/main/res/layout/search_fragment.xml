@@ -4,19 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/idSongResultSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
             android:scrollbars="none"
             android:footerDividersEnabled="true"
-            ></ListView>
+            ></android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

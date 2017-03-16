@@ -3,9 +3,10 @@ package android.beotron.tieuhoan.kara_2;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private boolean isFullScreen;
     private ListView listView;
     private Button btnRecoder, btnMic, btnEqualizer;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,9 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         setContentView(R.layout.video_you_tube);
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
-
         playVideo();
         setUpButton();
-        setUpListView();
+        setUpRecycle();
     }
 
     public void setUpButton() {
@@ -67,14 +68,18 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
     }
 
-    public void setUpListView() {
-        listView = (ListView) findViewById(R.id.listView);
-        HomeAdapter popularAdapter = new HomeAdapter(this, songs);
-        listView.setAdapter(popularAdapter);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            listView.setNestedScrollingEnabled(true);
-        }
-        listView.setOnItemClickListener(this);
+    public void setUpRecycle() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(VideoYouTube.this, LinearLayoutManager.VERTICAL, false);
+        HomeAdapter adapte = new HomeAdapter(songs, VideoYouTube.this);
+        recyclerView = (RecyclerView) findViewById(R.id.listView);
+        recyclerView.setAdapter(adapte);
+        adapte.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                playVideo.loadVideo(songs.get(position).getVideoId());
+            }
+        });
+        recyclerView.setLayoutManager(linearLayoutManager);
     }
 
     int seek;

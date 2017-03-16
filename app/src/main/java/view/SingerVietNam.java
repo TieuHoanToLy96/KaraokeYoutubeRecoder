@@ -44,11 +44,12 @@ public class SingerVietNam extends SingerFragment {
 //        }
 
         singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
-        for (Singer singer : singers) {
-            Log.e("tieuhoan ", singer.getNameSinger());
-        }
-        setUpListView(view);
+//        for (Singer singer : singers) {
+//            Log.e("tieuhoan ", singer.getNameSinger());
+//        }
+        setUpRecycleView(view);
 
+        sqLiteHelper.close();
 
         return view;
 

@@ -3,7 +3,9 @@ package view;
 import android.beotron.tieuhoan.kara_2.MainApp;
 import android.beotron.tieuhoan.kara_2.R;
 import android.beotron.tieuhoan.kara_2.TabLayoutAdapter;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
@@ -30,7 +33,9 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
 
     private ArrayList<Fragment> fragments;
     private ArrayList<String> fragmentTitles;
-    private ViewPager viewPager;
+
+
+    public static ViewPager viewPager;
     private SmartTabLayout tabLayout;
     private Toolbar toolbar;
     private ArrayList<Singer> singers;
@@ -77,6 +82,8 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
         tabLayout = (SmartTabLayout) view.findViewById(R.id.idTabLayout);
         tabLayout.setViewPager(viewPager);
         tabLayout.setOnPageChangeListener(this);
+
+        ((TextView) tabLayout.getTabAt(0)).setTextColor(Color.BLACK);
     }
 
 
@@ -89,15 +96,27 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
-        switch (position) {
-            case 0: {
-                toolbar.setTitle(fragmentTitles.get(0));
+        Log.e("tieuhoan", "tab select ");
 
+        for (int i = 0; i < fragments.size(); i++) {
+            TextView view = (TextView) tabLayout.getTabAt(i);
+            view.setTextColor(Color.WHITE);
+        }
 
-                break;
-            }
-            case 1: {
-                toolbar.setTitle(fragmentTitles.get(1));
+        TextView view1 = (TextView) tabLayout.getTabAt(position);
+        view1.setTextColor(Color.BLACK);
+
+        toolbar.setTitle(fragmentTitles.get(position));
+//
+//        switch (position) {
+//            case 0: {
+//                TextView view = (TextView) tabLayout.getTabAt(position);
+//                view.setTextColor(Color.BLACK);
+//                break;
+//            }
+//            case 1: {
+//                TextView view = (TextView) tabLayout.getTabAt(position);
+//                view.setTextColor(Color.BLACK);
 //                Bundle bundle = new Bundle();
 //                SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
 //                singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
@@ -106,26 +125,21 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
 //                }
 //                bundle.putSerializable("SINGER_VIETNAM", singers);
 //                MainApp.singersVietNam.setArguments(bundle);
-                break;
-            }
-            case 2: {
-                toolbar.setTitle(fragmentTitles.get(2));
-                break;
-            }
+//                break;
+//            }
+//            case 2: {
+//                TextView view = (TextView) tabLayout.getTabAt(position);
+//                view.setTextColor(Color.BLACK);
+//                break;
+//            }
+//
+//            case 3: {
+//                TextView view = (TextView) tabLayout.getTabAt(position);
+//                view.setTextColor(Color.BLACK);
+//                break;
+//            }
 
-            case 3: {
-                toolbar.setTitle(fragmentTitles.get(3));
-                break;
-            }
-
-        }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-
-
-        super.setUserVisibleHint(isVisibleToUser);
+//        }
     }
 
     @Override

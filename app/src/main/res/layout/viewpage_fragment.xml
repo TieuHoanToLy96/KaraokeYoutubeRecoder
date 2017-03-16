@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/idTabLayout"
         android:layout_width="match_parent"
@@ -14,12 +13,12 @@
         android:padding="5dp"
         app:stl_defaultTabTextColor="#ffffff"
         app:stl_dividerThickness="0dp"
-        app:stl_indicatorColor="#ca353333"
+        app:stl_indicatorColor="#ffffff"
         app:stl_indicatorCornerRadius="30dp"
         app:stl_indicatorGravity="center"
         app:stl_indicatorInterpolation="smart"
         app:stl_indicatorThickness="36dp"
-        app:stl_underlineThickness="0dp"></com.ogaclejapan.smarttablayout.SmartTabLayout>
+      app:stl_underlineThickness="0dp"></com.ogaclejapan.smarttablayout.SmartTabLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/idViewPager"
         android:layout_width="match_parent"

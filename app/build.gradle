@@ -37,6 +37,7 @@ dependencies {
     compile 'com.nightonke:boommenu:2.0.7'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile 'org.jetbrains:annotations-java5:15.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
 }
 
 

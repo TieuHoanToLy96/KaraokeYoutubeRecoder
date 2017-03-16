@@ -23,8 +23,14 @@ public class HangSo {
         return date.substring(0, 9);
     }
 
-    public static int[] imageResources = new int[]{
+    public static int[] imageResourcesFavorite = new int[]{
             R.mipmap.heart,
+            R.mipmap.home,
+            R.mipmap.share
+    };
+
+    public static int[] imageResourcesNotFavorite = new int[]{
+            R.mipmap.delete,
             R.mipmap.home,
             R.mipmap.share
     };

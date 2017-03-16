@@ -2,13 +2,11 @@ package adapter;
 
 import android.beotron.tieuhoan.kara_2.R;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,69 +16,74 @@ import java.util.ArrayList;
 import model.Singer;
 
 /**
- * Created by TieuHoan on 25/02/2017.
+ * Created by TieuHoan on 16/03/2017.
  */
 
-public class SingerAdapter extends BaseAdapter {
+public class SingerAdapter extends RecyclerView.Adapter<SingerAdapter.ViewHolderSinger> {
 
-    private Context context;
     private ArrayList<Singer> singers;
-    private AssetManager assetManager;
-    private Animation animation ;
-    private int lastPosition;
+    private Context context;
 
-    public SingerAdapter(Context context, ArrayList<Singer> singers) {
-        this.context = context;
+
+    public SingerAdapter(ArrayList<Singer> singers, Context context) {
         this.singers = singers;
+        this.context = context;
     }
 
     @Override
-    public int getCount() {
-        return singers.size();
+    public ViewHolderSinger onCreateViewHolder(ViewGroup viewGroup, int i) {
+        LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
+        View view = layoutInflater.inflate(R.layout.item_singer, null);
+
+
+        return new ViewHolderSinger(view);
     }
 
     @Override
-    public Object getItem(int i) {
-        return singers.get(i);
-    }
+    public void onBindViewHolder(ViewHolderSinger viewHolserSinger, int i) {
+        Singer singer = singers.get(i);
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder;
-        if (view == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_singer, null);
-            viewHolder.imageSinger = (ImageView) view.findViewById(R.id.idImageSinger);
-            viewHolder.nameSinger = (TextView) view.findViewById(R.id.idNameSinger);
-            view.setTag(viewHolder);
-        } else {
-
-            viewHolder = (ViewHolder) view.getTag();
-        }
-
-        Singer singer = singers.get(position);
-        viewHolder.nameSinger.setText(singer.getNameSinger());
-//        Typeface type = Typeface.createFromAsset(context.getAssets(),"fonts/VNI-Machina.ttf");
-//        viewHolder.nameSinger.setTypeface(type);
-
+        viewHolserSinger.nameSinger.setText(singer.getNameSinger());
         try {
-            Drawable d = Drawable.createFromStream(context.getAssets().open("viet/"+singer.getImageSinger()), null);
-            viewHolder.imageSinger.setImageDrawable(d);
+            Drawable d = Drawable.createFromStream(context.getAssets().open("viet/" + singer.getImageSinger()), null);
+            viewHolserSinger.imageSinger.setImageDrawable(d);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return view;
     }
 
-    public class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return singers.size();
+    }
+
+    class ViewHolderSinger extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageSinger;
         TextView nameSinger;
 
+        public ViewHolderSinger(View itemView) {
+            super(itemView);
+            imageSinger = (ImageView) itemView.findViewById(R.id.idImageSinger);
+            nameSinger = (TextView) itemView.findViewById(R.id.idNameSinger);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (onItemClick != null) {
+                onItemClick.OnClick(v, getPosition());
+            }
+        }
+    }
+
+    OnItemClick onItemClick;
+
+    public void setOnItemClick(OnItemClick onItemClick) {
+        this.onItemClick = onItemClick;
+    }
+
+    public interface OnItemClick {
+        void OnClick(View view, int position);
     }
 }

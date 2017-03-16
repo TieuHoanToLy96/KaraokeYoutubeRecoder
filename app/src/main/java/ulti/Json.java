@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,13 +72,13 @@ public class Json {
     public static class LoadAdd extends AsyncTask<Void, Void, ArrayList<Song>> {
 
         private Handler handler;
-        private ListView listView;
+        private RecyclerView recyclerView;
         private Context context;
         private View view;
 
-        public LoadAdd(Handler handler, ListView listView, Context context) {
+        public LoadAdd(Handler handler, RecyclerView recyclerView, Context context) {
             this.handler = handler;
-            this.listView = listView;
+            this.recyclerView = recyclerView;
             this.context = context;
         }
 
@@ -87,7 +88,7 @@ public class Json {
             super.onPreExecute();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.dialog_process, null);
-            listView.addFooterView(view);
+
         }
 
         @Override
@@ -110,7 +111,7 @@ public class Json {
             message.what = HangSo.KEY_HANDLER2;
             message.obj = songs;
             handler.sendMessage(message);
-            listView.removeFooterView(view);
+//            listView.removeFooterView(view);
         }
     }
 

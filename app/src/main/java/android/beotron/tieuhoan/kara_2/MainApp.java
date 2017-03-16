@@ -2,6 +2,7 @@ package android.beotron.tieuhoan.kara_2;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -103,6 +104,7 @@ public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClic
 
         toolbar = (Toolbar) findViewById(R.id.idToolBar);
         toolbar.setTitle("Béo Tròn");
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
 

@@ -124,9 +124,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return result;
     }
 
+
     public boolean deleteSong(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(SQLiteHelper.TABLEFVORITE, SQLiteHelper.VIDEOID + "=" + name, null) > 0;
+        String clause[] = {name};
+        return db.delete(SQLiteHelper.TABLEFVORITE, SQLiteHelper.VIDEOID + "=?", clause) > 0;
     }
 
     @Override

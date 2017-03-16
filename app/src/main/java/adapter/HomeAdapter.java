@@ -1,17 +1,21 @@
 package adapter;
 
-import android.app.Activity;
 import android.beotron.tieuhoan.kara_2.R;
+import android.beotron.tieuhoan.kara_2.VideoYouTube;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
@@ -23,124 +27,119 @@ import java.util.ArrayList;
 import model.Song;
 import ulti.HangSo;
 import ulti.SQLiteHelper;
-
+import view.ViewPageFragment;
 
 /**
- * Created by TieuHoan on 08/02/2017.
+ * Created by TieuHoan on 15/03/2017.
  */
 
-public class HomeAdapter extends BaseAdapter {
-    private Context context;
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVideo> {
     private ArrayList<Song> songs;
-    private Animation animation;
-    private int lastPosition = -1;
-    private Activity activity;
+    private Context context;
+    private int listImageBoom[];
+    private int position;
 
-
-    public HomeAdapter(Context context, ArrayList<Song> songs) {
-        this.context = context;
+    public HomeAdapter(ArrayList<Song> songs, Context context) {
         this.songs = songs;
+        this.context = context;
     }
 
     @Override
-    public int getCount() {
-        return songs.size();
+    public ViewHolderVideo onCreateViewHolder(ViewGroup viewGroup, int i) {
+        LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
+        View view = layoutInflater.inflate(R.layout.item_video, viewGroup, false);
+        return new ViewHolderVideo(view);
+
     }
 
     @Override
-    public Object getItem(int position) {
-        return songs.get(position);
-    }
+    public void onBindViewHolder(final ViewHolderVideo viewHolderVideo, final int position) {
+        this.position = position;
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
-        View view = convertView;
-        final ViewHolder viewHolder;
-
-        if (view == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_video, null);
-            viewHolder.imageThumb = (ImageView) view.findViewById(R.id.imageThumb);
-            viewHolder.tittle = (TextView) view.findViewById(R.id.tittle);
-            viewHolder.nameChannel = (TextView) view.findViewById(R.id.nameChannel);
-            viewHolder.timeUpLoad = (TextView) view.findViewById(R.id.timeUpLoad);
-            viewHolder.boomButtonMore = (BoomMenuButton) view.findViewById(R.id.idBoomMenu);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
-
-//        // hiệu ứng listview
-//        lastPosition = position;
-//        animation = AnimationUtils.loadAnimation(context, (position > lastPosition) ? R.anim.scroll_listview_bottom : R.anim.scroll_listview_top);
-//        view.startAnimation(animation);
-//        lastPosition = position;
-
-        // set item cho listview
         final Song song = songs.get(position);
-        viewHolder.tittle.setText(song.getTittle());
-        viewHolder.nameChannel.setText(song.getNameChannel());
-        viewHolder.timeUpLoad.setText(song.getTimeUpLoad());
-        Glide.with(context).load(song.getUrlImageThumb()).into(viewHolder.imageThumb);
+        final SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
+        viewHolderVideo.tittle.setText(song.getTittle());
+        viewHolderVideo.nameChannel.setText(song.getNameChannel());
+        viewHolderVideo.timeUpLoad.setText(song.getTimeUpLoad());
+        Glide.with(context).load(song.getUrlImageThumb()).into(viewHolderVideo.imageThumb);
 
-        viewHolder.boomButtonMore.clearBuilders();
-
-        viewHolder.boomButtonMore.setOnClickListener(new View.OnClickListener() {
+        viewHolderVideo.boomButtonMore.clearBuilders();
+        viewHolderVideo.boomButtonMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.boomButtonMore.boom();
+                viewHolderVideo.boomButtonMore.boom();
+                if (!checkExist(songs, song)) {
+                    song.setIsFavorite("false");
+                } else {
+                    song.setIsFavorite("true");
+                }
             }
         });
 
-        final SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
-        for (int i = 0; i < viewHolder.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
-            final SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
-                    .listener(new OnBMClickListener() {
-                        @Override
-                        public void onBoomButtonClick(int index) {
-                            switch (index) {
-                                case 0: {
-                                    if (song.getIsFavorite().equals("false")) {
-                                        addToDataBase(sqLiteHelper, song);
-                                    } else {
-                                        for (int j = 0; j < sqLiteHelper.getAllSong().size(); j++) {
-                                            Log.e("tieuhoan", String.valueOf(sqLiteHelper.getAllSong().get(j).getVideoId()));
-                                        }
-
-                                        Log.e("song", song.getVideoId());
-
-                                        for (Song song1 : sqLiteHelper.getAllSong()) {
-                                            if (song.getVideoId().equalsIgnoreCase(song1.getVideoId())) {
-
-                                                sqLiteHelper.deleteSong(song.getVideoId());
-                                                HomeAdapter.this.notifyDataSetChanged();
-                                                Log.e("tieuhoan", "Xóa thành công");
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    });
-
-            builder.normalImageRes(HangSo.imageResources[i]);
-            builder.imagePadding(new Rect(10, 10, 10, 10));
-            viewHolder.boomButtonMore.addBuilder(builder);
+        if (checkExist(sqLiteHelper.getAllSong(), song)) {
+            listImageBoom = HangSo.imageResourcesNotFavorite;
+        } else {
+            listImageBoom = HangSo.imageResourcesFavorite;
         }
-        return view;
+
+
+//        viewHolderVideo.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("SONG", songs.get(position));
+//                bundle.putSerializable("SONGS", songs);
+//                Intent intent = new Intent(context, VideoYouTube.class);
+//                intent.putExtras(bundle);
+//                context.startActivity(intent);
+//            }
+//        });
+
+
+        for (int i = 0; i < viewHolderVideo.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
+            final SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder();
+            builder.listener(new OnBMClickListener() {
+                @Override
+                public void onBoomButtonClick(int index) {
+                    switch (index) {
+                        case 0: {
+                            if (song.getIsFavorite().equals("false")) {
+                                addToDataBase(sqLiteHelper, song);
+                                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                            } else {
+                                removeDataBase(sqLiteHelper, song);
+                                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+            builder.normalImageRes(listImageBoom[i]);
+            builder.imagePadding(new Rect(10, 10, 10, 10));
+            viewHolderVideo.boomButtonMore.addBuilder(builder);
+        }
     }
 
-    public void removeDataBase() {
 
+    @Override
+    public int getItemCount() {
+        return songs.size();
+    }
 
+    public void removeDataBase(SQLiteHelper sqLiteHelper, Song song) {
+        for (Song song1 : sqLiteHelper.getAllSong()) {
+            if (song.getVideoId().equals(song1.getVideoId())) {
+                song.setIsFavorite("false");
+                if (ViewPageFragment.viewPager.getCurrentItem() == 3) {
+                    songs.remove(song);
+                    HomeAdapter.this.notifyDataSetChanged();
+                }
+                sqLiteHelper.deleteSong(song.getVideoId());
+                Log.e("tieuhoan", "Xóa thành công");
+                break;
+            }
+        }
     }
 
 
@@ -174,13 +173,41 @@ public class HomeAdapter extends BaseAdapter {
         return check;
     }
 
-    public class ViewHolder {
+    class ViewHolderVideo extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageThumb;
         private TextView tittle;
         private TextView nameChannel;
         private TextView timeUpLoad;
         private BoomMenuButton boomButtonMore;
+
+        public ViewHolderVideo(View itemView) {
+            super(itemView);
+            imageThumb = (ImageView) itemView.findViewById(R.id.imageThumb);
+            tittle = (TextView) itemView.findViewById(R.id.tittle);
+            nameChannel = (TextView) itemView.findViewById(R.id.nameChannel);
+            timeUpLoad = (TextView) itemView.findViewById(R.id.timeUpLoad);
+            boomButtonMore = (BoomMenuButton) itemView.findViewById(R.id.idBoomMenu);
+
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            if (onItemClickRecycle != null) {
+                onItemClickRecycle.OnItemClick(v, getPosition());
+            }
+        }
+    }
+
+    OnItemClickRecycle onItemClickRecycle;
+
+    public void setOnItemClickRecycle(OnItemClickRecycle onItemClickRecycle) {
+        this.onItemClickRecycle = onItemClickRecycle;
     }
 
 
+    public interface OnItemClickRecycle {
+        void OnItemClick(View view, int position);
+    }
 }

@@ -55,7 +55,7 @@
 
             </LinearLayout>
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +63,6 @@
                 android:layout_below="@+id/option"
                 android:footerDividersEnabled="true"
                 android:scrollbars="none"
-                android:touchscreenBlocksFocus="true"></ListView>
+                android:touchscreenBlocksFocus="true"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
