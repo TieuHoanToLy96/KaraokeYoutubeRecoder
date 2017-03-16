@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
 
 
         firstVisibleInListview = linearLayoutManager.findFirstVisibleItemPosition();
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         homeAdapter.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
             @Override
             public void OnItemClick(View view, int position) {

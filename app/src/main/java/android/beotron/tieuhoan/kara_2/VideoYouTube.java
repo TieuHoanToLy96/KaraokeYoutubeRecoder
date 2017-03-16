@@ -33,9 +33,9 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer playVideo;
     private boolean isFullScreen;
-    private ListView listView;
     private Button btnRecoder, btnMic, btnEqualizer;
     private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,19 +126,29 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         playVideo.loadVideo(songs.get(i).getVideoId());
     }
 
+    boolean isRecoder;
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnMic: {
-                Toast.makeText(VideoYouTube.this, "click", Toast.LENGTH_SHORT).show();
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Recoder recoder = new Recoder();
-                        recoder.startRecoder();
-                    }
-                });
-                thread.start();
+
+                Recoder recoder = new Recoder(isRecoder);
+
+                if (isRecoder == true) {
+                    isRecoder = false;
+                    recoder.setCheckRecord(isRecoder);
+                    Toast.makeText(VideoYouTube.this, "Dừng", Toast.LENGTH_SHORT).show();
+                    btnMic.setText("Mic");
+                } else {
+                    isRecoder = true;
+                    recoder.setCheckRecord(isRecoder);
+                    recoder.startRecoder();
+                    Toast.makeText(VideoYouTube.this, "Bắt đầu", Toast.LENGTH_SHORT).show();
+                    btnMic.setText("");
+
+                }
+
                 break;
             }
             case R.id.btnEqualizer: {

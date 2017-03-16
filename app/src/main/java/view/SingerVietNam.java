@@ -33,23 +33,34 @@ public class SingerVietNam extends SingerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.singer_fragment, null);
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
+//        SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
 
-//        for (int i = 0; i < HangSo.listSingerVietNam.length; i++) {
-//            Singer singer = new Singer();
-//            singer.setImageSinger(HangSo.listSingerVietNam[i][0]);
-//            singer.setNameSinger(HangSo.listSingerVietNam[i][1]);
-//            Log.e("tieuhoan ", singer.getNameSinger());
-//            sqLiteHelper.addSinger(singer, SQLiteHelper.TABLESINGERVIETNAM);
+//        if(sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM)==null){
+//            for (int i = 0; i < HangSo.listSingerVietNam.length; i++) {
+//                Singer singer = new Singer();
+//                singer.setImageSinger(HangSo.listSingerVietNam[i][0]);
+//                singer.setNameSinger(HangSo.listSingerVietNam[i][1]);
+//                Log.e("tieuhoan ", singer.getNameSinger());
+//                sqLiteHelper.addSinger(singer, SQLiteHelper.TABLESINGERVIETNAM);
+//            }
 //        }
-
-        singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
+//        singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
 //        for (Singer singer : singers) {
 //            Log.e("tieuhoan ", singer.getNameSinger());
 //        }
+
+        if (singers == null) {
+            singers = new ArrayList<>();
+            for (int i = 0; i < HangSo.listSingerVietNam.length; i++) {
+                Singer singer = new Singer();
+                singer.setImageSinger(HangSo.listSingerVietNam[i][0]);
+                singer.setNameSinger(HangSo.listSingerVietNam[i][1]);
+                singers.add(singer);
+            }
+        }
         setUpRecycleView(view);
 
-        sqLiteHelper.close();
+//        sqLiteHelper.close();
 
         return view;
 
