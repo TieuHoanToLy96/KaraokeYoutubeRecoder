@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:weightSum="2.5">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="120dp"
+              android:orientation="horizontal"
+              android:padding="5dp"
+              android:weightSum="2.5">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -17,7 +17,7 @@
             android:id="@+id/imageThumb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/hello" />
+            android:src="@mipmap/hello"/>
         />
     </LinearLayout>
 
@@ -50,7 +50,7 @@
                 android:text="[VIDEO LYRIC] Thái Bình Mồ Hôi Rơi - Sơn Tùng MTP"
                 android:textAlignment="viewStart"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
             <!--<ImageView-->
             <!--android:id="@+id/imgViewMore"-->
@@ -63,13 +63,13 @@
             <com.nightonke.boommenu.BoomMenuButton
                 android:id="@+id/idBoomMenu"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 app:bmb_buttonEnum="simpleCircle"
-                app:bmb_piecePlaceEnum="piecePlace_dot_3_3"
                 app:bmb_buttonPlaceEnum="buttonPlace_sc_3_3"
-                app:bmb_shadowEffect="true"
-                app:bmb_inList="true"/>
+                app:bmb_inList="true"
+                app:bmb_piecePlaceEnum="piecePlace_dot_3_3"
+                app:bmb_shadowEffect="true"/>
             />
 
         </LinearLayout>
@@ -92,7 +92,7 @@
                 android:maxLines="1"
                 android:text="Tên Chanel"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="13dp" />
+                android:textSize="13dp"/>
 
             <TextView
                 android:id="@+id/timeUpLoad"
@@ -103,18 +103,18 @@
                 android:maxLines="1"
                 android:text="Thời gian up"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="12dp" />
+                android:textSize="12dp"/>
         </LinearLayout>
 
         <!--<com.nightonke.boommenu.BoomMenuButton-->
-            <!--android:id="@+id/boomButtonMore"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@mipmap/menu"-->
-            <!--app:bmb_buttonEnum="simpleCircle"-->
-            <!--app:bmb_piecePlaceEnum="piecePlace_dot_9_1"-->
-            <!--app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"-->
-            <!--app:bmb_inList="true"></com.nightonke.boommenu.BoomMenuButton>-->
+        <!--android:id="@+id/boomButtonMore"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@mipmap/menu"-->
+        <!--app:bmb_buttonEnum="simpleCircle"-->
+        <!--app:bmb_piecePlaceEnum="piecePlace_dot_9_1"-->
+        <!--app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"-->
+        <!--app:bmb_inList="true"></com.nightonke.boommenu.BoomMenuButton>-->
 
     </LinearLayout>
 

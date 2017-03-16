@@ -11,18 +11,16 @@ import android.util.Log;
  * Created by TieuHoan on 24/02/2017.
  */
 
-public class Recoder {
+public class Recoder implements Runnable{
 
     private int bufferSizeTrack;
     private int bufferSizeRecord;
-    private AudioRecord record;
+
+    public AudioRecord record;
     private AudioTrack track;
     private boolean checkRecord;
     private byte[] audioData;
 
-    public Recoder(boolean checkRecord) {
-        this.checkRecord = checkRecord;
-    }
 
     public boolean getCheckRecord() {
         return checkRecord;
@@ -33,7 +31,7 @@ public class Recoder {
     }
 
     public void startRecoder() {
-
+        System.out.println("00000000");
         bufferSizeRecord = AudioRecord.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING);
 //            bufferSizeTrack = AudioTrack.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING);
 
@@ -42,22 +40,23 @@ public class Recoder {
 
         record.startRecording();
         track.play();
-        setCheckRecord(true);
+        checkRecord = true;
+        System.out.println("11111");
+        audioData = new byte[bufferSizeRecord];
+        while (checkRecord) {
+            System.out.println("zzzzz");;
+            record.read(audioData, 0, bufferSizeRecord);
+            track.write(audioData, 0, bufferSizeRecord);
+        }
 
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                audioData = new byte[bufferSizeRecord];
-                while (getCheckRecord()) {
-                    record.read(audioData, 0, bufferSizeRecord);
-                    track.write(audioData, 0, bufferSizeRecord);
-                }
-            }
-        });
-        thread.start();
     }
+
+
 
     private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
 
+    @Override
+    public void run() {
+        startRecoder();
+    }
 }
