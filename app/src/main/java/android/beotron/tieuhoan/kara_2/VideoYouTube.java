@@ -100,7 +100,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         playVideo = youTubePlayer;
         youTubePlayer.setShowFullscreenButton(true);
         youTubePlayer.loadVideo(song.getVideoId());
-        youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION
+       youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION
                 | YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI
                 | YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE
                 | YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);

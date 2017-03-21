@@ -67,7 +67,8 @@ public class Recoder implements Runnable {
         record = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, HangSo.SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, HangSo.ENCODING, bufferSizeRecord);
         track = new AudioTrack(AudioManager.STREAM_MUSIC, HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING, bufferSizeRecord, AudioTrack.MODE_STREAM);
 
-
+//        NoiseSuppressor noiseSuppressor = NoiseSuppressor.create(record.getAudioSessionId());
+//        noiseSuppressor.setEnabled(true);
 
 
 //            bufferSizeTrack = AudioTrack.getMinBufferSize(HangSo.SAMPLERATE, AudioFormat.CHANNEL_OUT_MONO, HangSo.ENCODING);

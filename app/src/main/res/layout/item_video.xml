@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="120dp"
+              android:layout_height="110dp"
               android:orientation="horizontal"
               android:padding="5dp"
               android:weightSum="2.5">
@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#EEEEEE">
+       >
 
         <com.google.android.youtube.player.YouTubeThumbnailView
             android:id="@+id/imageThumb"
@@ -25,7 +25,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
-        android:background="#EEEEEE"
         android:orientation="vertical"
 
         >
@@ -52,13 +51,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textSize="15dp"/>
 
-            <!--<ImageView-->
-            <!--android:id="@+id/imgViewMore"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="right|bottom"-->
-            <!--android:layout_weight="1"-->
-            <!--android:src="@mipmap/menu"/>-->
 
             <com.nightonke.boommenu.BoomMenuButton
                 android:id="@+id/idBoomMenu"
@@ -105,16 +97,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="12dp"/>
         </LinearLayout>
-
-        <!--<com.nightonke.boommenu.BoomMenuButton-->
-        <!--android:id="@+id/boomButtonMore"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@mipmap/menu"-->
-        <!--app:bmb_buttonEnum="simpleCircle"-->
-        <!--app:bmb_piecePlaceEnum="piecePlace_dot_9_1"-->
-        <!--app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"-->
-        <!--app:bmb_inList="true"></com.nightonke.boommenu.BoomMenuButton>-->
 
     </LinearLayout>
 
