@@ -1,25 +1,25 @@
 package android.beotron.tieuhoan.kara_2;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.AudioRecord;
-import android.net.Uri;
+
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -27,7 +27,9 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 
+import adapter.AdapterChinhAm;
 import adapter.HomeAdapter;
+import model.ChinhAm;
 import model.Song;
 import ulti.HangSo;
 import ulti.Recoder;
@@ -41,12 +43,8 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private boolean isFullScreen;
     private Button btnRecoder, btnMic, btnEqualizer;
     private RecyclerView recyclerView;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +55,13 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         playVideo();
         setUpButton();
         setUpRecycle();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void setUpButton() {
 
         btnMic = (Button) findViewById(R.id.btnMic);
+        btnEqualizer = (Button) findViewById(R.id.btnEqualizer);
+        btnEqualizer.setOnClickListener(this);
         btnMic.setOnClickListener(this);
     }
 
@@ -103,9 +100,10 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         playVideo = youTubePlayer;
         youTubePlayer.setShowFullscreenButton(true);
         youTubePlayer.loadVideo(song.getVideoId());
-        youTubePlayer.play();
-//        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
-        youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+        youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION
+                | YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI
+                | YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE
+                | YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
 
         youTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
             @Override
@@ -114,26 +112,17 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
                 seek = playVideo.getCurrentTimeMillis();
                 Log.e("seek", String.valueOf(seek));
                 playVideo.seekToMillis(seek);
-                playVideo.play();
+
             }
         });
     }
+
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isFullScreen) {
-            playVideo.setFullscreen(false);
-            playVideo.seekToMillis(playVideo.getCurrentTimeMillis());
-            Log.e("seek back", String.valueOf(playVideo.getCurrentTimeMillis()));
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -141,7 +130,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
     boolean isRecoder;
-    Recoder recoder;
+    Recoder recoder = new Recoder(VideoYouTube.this);
     Thread thread;
 
     @Override
@@ -154,24 +143,38 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
                     Toast.makeText(VideoYouTube.this, "Dừng", Toast.LENGTH_SHORT).show();
                     btnMic.setText("Mic");
                     recoder.setCheckRecord(isRecoder);
+                    recoder.record.release();
+                    recoder.track.release();
+                    thread.interrupt();
                 } else {
                     isRecoder = true;
                     Toast.makeText(VideoYouTube.this, "Bắt đầu", Toast.LENGTH_SHORT).show();
                     btnMic.setText("Pause");
-                    recoder = new Recoder();
                     thread = new Thread(recoder);
                     thread.start();
+                }
+                break;
+            }
+            case R.id.btnEqualizer: {
+                if (isRecoder) {
+                    Dialog dialog = new Dialog(VideoYouTube.this);
+                    recoder.equalizer();
+                    AdapterChinhAm adapterChinhAm = new AdapterChinhAm(VideoYouTube.this, recoder.getChinhAms(), recoder.getEqualizer());
+                    dialog.setContentView(R.layout.dialog_chinh_am);
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.height = 900;
+                    dialog.getWindow().setAttributes(lp);
+                    listView = (ListView) dialog.findViewById(R.id.listViewFre);
+                    listView.setAdapter(adapterChinhAm);
+                    dialog.show();
                 }
 
 
                 break;
             }
-            case R.id.btnEqualizer: {
-
-                break;
-            }
         }
     }
+
 
     private boolean permissionToRecordAccepted = false;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
@@ -189,39 +192,15 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("VideoYouTube Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
     @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
+    public void onBackPressed() {
+        if (isFullScreen) {
+            playVideo.setFullscreen(false);
+            playVideo.seekToMillis(playVideo.getCurrentTimeMillis());
+            Log.e("seek back", String.valueOf(playVideo.getCurrentTimeMillis()));
+        } else {
+            recoder.setCheckRecord(false);
+            super.onBackPressed();
+        }
     }
 }

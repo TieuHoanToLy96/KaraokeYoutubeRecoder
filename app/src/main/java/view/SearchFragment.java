@@ -56,7 +56,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.search_fragment, null);
 
         if (pathSearch != null) {

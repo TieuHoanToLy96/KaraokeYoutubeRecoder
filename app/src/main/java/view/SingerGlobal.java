@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import model.Singer;
 import ulti.HangSo;
-import ulti.SQLiteAsset;
 import ulti.SQLiteHelper;
 
 /**

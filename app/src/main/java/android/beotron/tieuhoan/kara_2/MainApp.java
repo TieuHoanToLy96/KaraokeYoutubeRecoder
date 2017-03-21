@@ -116,7 +116,6 @@ public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClic
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-            Log.e("Home pressed", "tieuhoan");
             onBackPressed();
             return true;
         }

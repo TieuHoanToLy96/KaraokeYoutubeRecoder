@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import model.Singer;
 import model.Song;
 import ulti.HangSo;
-import ulti.SQLiteAsset;
-import ulti.SQLiteHelper;
 
 /**
  * Created by TieuHoan on 12/03/2017.

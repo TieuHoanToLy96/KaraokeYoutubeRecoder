@@ -37,7 +37,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
     private ArrayList<Song> songs;
     private Context context;
     private int listImageBoom[];
-    private int position;
 
     public HomeAdapter(ArrayList<Song> songs, Context context) {
         this.songs = songs;
@@ -54,7 +53,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
 
     @Override
     public void onBindViewHolder(final ViewHolderVideo viewHolderVideo, final int position) {
-        this.position = position;
 
         final Song song = songs.get(position);
         final SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
@@ -68,11 +66,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
             @Override
             public void onClick(View v) {
                 viewHolderVideo.boomButtonMore.boom();
-                if (!checkExist(songs, song)) {
-                    song.setIsFavorite("false");
+                if (checkExist(sqLiteHelper.getAllSong(), song)) {
+                    listImageBoom = HangSo.imageResourcesNotFavorite;
                 } else {
-                    song.setIsFavorite("true");
+                    listImageBoom = HangSo.imageResourcesFavorite;
                 }
+                viewHolderVideo.boomButtonMore.notifyAll();
+
+
             }
         });
 
@@ -82,20 +83,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
             listImageBoom = HangSo.imageResourcesFavorite;
         }
 
-
-//        viewHolderVideo.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("SONG", songs.get(position));
-//                bundle.putSerializable("SONGS", songs);
-//                Intent intent = new Intent(context, VideoYouTube.class);
-//                intent.putExtras(bundle);
-//                context.startActivity(intent);
-//            }
-//        });
-
-
         for (int i = 0; i < viewHolderVideo.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
             final SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder();
             builder.listener(new OnBMClickListener() {
@@ -103,12 +90,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
                 public void onBoomButtonClick(int index) {
                     switch (index) {
                         case 0: {
-                            if (song.getIsFavorite().equals("false")) {
-                                addToDataBase(sqLiteHelper, song);
-                                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                            } else {
+                            if (checkExist(sqLiteHelper.getAllSong(), song)) {
                                 removeDataBase(sqLiteHelper, song);
                                 Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            } else {
+                                addToDataBase(sqLiteHelper, song);
+                                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
                             }
                             break;
                         }
@@ -130,13 +117,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
     public void removeDataBase(SQLiteHelper sqLiteHelper, Song song) {
         for (Song song1 : sqLiteHelper.getAllSong()) {
             if (song.getVideoId().equals(song1.getVideoId())) {
-                song.setIsFavorite("false");
                 if (ViewPageFragment.viewPager.getCurrentItem() == 3) {
                     songs.remove(song);
                     HomeAdapter.this.notifyDataSetChanged();
                 }
                 sqLiteHelper.deleteSong(song.getVideoId());
-                Log.e("tieuhoan", "Xóa thành công");
                 break;
             }
         }
@@ -144,21 +129,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVide
 
 
     public void addToDataBase(SQLiteHelper sqLiteHelper, Song song) {
-
-        final ArrayList<Song> songDatabase = sqLiteHelper.getAllSong();
-        if (songDatabase.size() == 0) {
-            song.setIsFavorite("true");
+        ArrayList<Song> songDataBase = sqLiteHelper.getAllSong();
+        if (songDataBase.size() == 0) {
             sqLiteHelper.addSong(song);
-            Log.e("tieuhoan", "Thêm thành công");
         } else {
-            if (checkExist(songDatabase, song) == false) {
-                song.setIsFavorite("true");
+            if (!checkExist(songDataBase, song)) {
                 sqLiteHelper.addSong(song);
-                Log.e("tieuhoan", "Thêm thành công");
             }
         }
-
-
     }
 
 
