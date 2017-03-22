@@ -1,19 +1,30 @@
 package android.beotron.tieuhoan.kara_2;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,7 +42,7 @@ import view.SingerVietNam;
 import view.ViewPageFragment;
 
 
-public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
     private Toolbar toolbar;
     private MenuItem searchItem, menuItem;
@@ -123,6 +134,8 @@ public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClic
     }
 
 
+    ImageButton imageButton;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -132,17 +145,15 @@ public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClic
 
         // find by id
         searchItem = menu.findItem(R.id.searchView);
-        menuItem = menu.findItem(R.id.menu);
-
-        //get item in tool bar
         searchView = (SearchView) searchItem.getActionView();
+
+        menuItem = menu.findItem(R.id.menu);
+        menuItem.setOnMenuItemClickListener(this);
 
 
         //set up item
 
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getComponentName()));
-
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
@@ -178,10 +189,33 @@ public class MainApp extends AppCompatActivity implements Toolbar.OnMenuItemClic
         }
     }
 
+
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.menu: {
+                ArrayList<String> test = new ArrayList<>();
+                test.add("Cài đặt");
+                test.add("File ghi âm");
+                test.add("Thông tin");
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, test);
+                ListView listView = new ListView(this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(position == 0){
+//                            FragmentControl.goToFragmentAddBackStack();
+                        }
+                    }
+                });
+                Dialog dialog = new Dialog(this);
+                dialog.setTitle("Tùy chọn");
+                dialog.setContentView(listView);
+                dialog.show();
 
+                break;
+            }
         }
         return true;
     }

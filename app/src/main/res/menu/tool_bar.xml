@@ -12,6 +12,7 @@
         android:id="@+id/menu"
         android:icon="@mipmap/menu"
         android:title="Report"
+        android:actionViewClass="android.widget.ImageButton"
         app:showAsAction="ifRoom"/>
 
 </menu>

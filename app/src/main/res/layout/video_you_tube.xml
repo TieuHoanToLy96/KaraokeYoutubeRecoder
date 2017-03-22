@@ -30,7 +30,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/custom_shape_image"
+                    android:background="@drawable/btnmic_not_active"
                     android:text="Ghi âm"
                     android:textAllCaps="false" />
 
@@ -39,7 +39,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/custom_shape_image"
+                    android:background="@drawable/btnmic_not_active"
                     android:text="Mic"
                     android:textAllCaps="false" />
 
@@ -48,7 +48,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/custom_shape_image"
+                    android:background="@drawable/btnmic_not_active"
                     android:text="Equalizer"
                     android:textAllCaps="false" />
 

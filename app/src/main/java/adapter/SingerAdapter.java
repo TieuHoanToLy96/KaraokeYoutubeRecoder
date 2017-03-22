@@ -2,6 +2,7 @@ package adapter;
 
 import android.beotron.tieuhoan.kara_2.R;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
