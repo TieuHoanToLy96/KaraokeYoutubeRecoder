@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import adapter.AdapterListVideo;
 import adapter.HomeAdapter;
 import model.Song;
 import ulti.HangSo;
@@ -31,7 +32,7 @@ import ulti.Json;
 public class HomeFragment extends Fragment {
 
     private ArrayList<Song> songs;
-    private HomeAdapter homeAdapter;
+    private AdapterListVideo adapterListVideo;
     private int lastVisibleItem;
     RecyclerView recyclerView;
 
@@ -47,8 +48,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, null);
 
-        Log.e("songs bundle ", String.valueOf(songs.size()));
-//        setUpListView(songs, view);
+
         setUpRecycle(songs, view);
 
         return view;
@@ -61,10 +61,9 @@ public class HomeFragment extends Fragment {
             if (msg.what == HangSo.KEY_HANDLER2) {
                 super.handleMessage(msg);
                 songs.addAll((ArrayList<Song>) msg.obj);
-                homeAdapter.notifyDataSetChanged();
-                Log.e("songs", String.valueOf(songs.size()));
-            }
+                adapterListVideo.notifyDataSetChanged();
 
+            }
         }
     };
 
@@ -73,14 +72,14 @@ public class HomeFragment extends Fragment {
 
     public void setUpRecycle(final ArrayList<Song> songs, View view) {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        homeAdapter = new HomeAdapter(songs, getActivity());
+        adapterListVideo = new AdapterListVideo(songs, getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.idListViewHome);
-        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setAdapter(adapterListVideo);
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
         firstVisibleInListview = linearLayoutManager.findFirstVisibleItemPosition();
-        homeAdapter.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
+        adapterListVideo.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
             @Override
             public void OnItemClick(View view, int position) {
                 Bundle bundle = new Bundle();

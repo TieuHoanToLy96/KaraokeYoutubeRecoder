@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import adapter.AdapterListVideo;
 import adapter.HomeAdapter;
 import model.Song;
 import ulti.SQLiteHelper;
@@ -42,12 +43,12 @@ public class FavoriteFragment extends Fragment implements HomeAdapter.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorite_fragment, null);
 
-        HomeAdapter homeAdapter = new HomeAdapter(songs, getActivity());
+        AdapterListVideo adapterListVideo = new AdapterListVideo(songs, getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.idListViewFavorite);
-        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setAdapter(adapterListVideo);
         recyclerView.setLayoutManager(linearLayoutManager);
-        homeAdapter.setOnItemClickRecycle(this);
+        adapterListVideo.setOnItemClickRecycle(this);
 
         return view;
     }

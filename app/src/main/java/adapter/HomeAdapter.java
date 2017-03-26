@@ -1,19 +1,29 @@
 package adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.beotron.tieuhoan.kara_2.R;
 import android.beotron.tieuhoan.kara_2.VideoYouTube;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +36,7 @@ import java.util.ArrayList;
 
 import model.Song;
 import ulti.HangSo;
+import ulti.Recoder;
 import ulti.SQLiteHelper;
 import view.ViewPageFragment;
 
@@ -33,159 +44,119 @@ import view.ViewPageFragment;
  * Created by TieuHoan on 15/03/2017.
  */
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderVideo> {
-    private ArrayList<Song> songs;
-    private Context context;
-    private int listImageBoom[];
+public class HomeAdapter extends AdapterListVideo {
+
+    private static final int TYPEHEAD = 0;
+    private static int TYPE_ITEM = 1;
+
 
     public HomeAdapter(ArrayList<Song> songs, Context context) {
-        this.songs = songs;
-        this.context = context;
+        super(songs, context);
+
     }
 
+
     @Override
-    public ViewHolderVideo onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view;
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        View view = layoutInflater.inflate(R.layout.item_video, viewGroup, false);
-        return new ViewHolderVideo(view);
+        if (viewType == TYPEHEAD) {
+            view = layoutInflater.inflate(R.layout.header, viewGroup, false);
+            Log.e("create", "header");
+            return new ViewHolderVideoHeader(view);
+        } else if (viewType == TYPE_ITEM) {
+            view = layoutInflater.inflate(R.layout.item_video, viewGroup, false);
+            Log.e("create", "video");
+            return new AdapterListVideo.ViewHolderVideo(view);
+        }
+        throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
+    }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isPositionHeader(position))
+            return TYPEHEAD;
+        return TYPE_ITEM;
+    }
+
+    private boolean isPositionHeader(int position) {
+        return position == 0;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolderVideo viewHolderVideo, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
 
-        final Song song = songs.get(position);
-        final SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
-        viewHolderVideo.tittle.setText(song.getTittle());
-        viewHolderVideo.nameChannel.setText(song.getNameChannel());
-        viewHolderVideo.timeUpLoad.setText(song.getTimeUpLoad());
-        Glide.with(context).load(song.getUrlImageThumb()).into(viewHolderVideo.imageThumb);
-
-        viewHolderVideo.boomButtonMore.clearBuilders();
-        viewHolderVideo.boomButtonMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolderVideo.boomButtonMore.boom();
-                if (checkExist(sqLiteHelper.getAllSong(), song)) {
-                    listImageBoom = HangSo.imageResourcesNotFavorite;
-                } else {
-                    listImageBoom = HangSo.imageResourcesFavorite;
-                }
-                viewHolderVideo.boomButtonMore.notifyAll();
-
-
-            }
-        });
-
-        if (checkExist(sqLiteHelper.getAllSong(), song)) {
-            listImageBoom = HangSo.imageResourcesNotFavorite;
-        } else {
-            listImageBoom = HangSo.imageResourcesFavorite;
-        }
-
-        for (int i = 0; i < viewHolderVideo.boomButtonMore.getPiecePlaceEnum().pieceNumber(); i++) {
-            final SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder();
-            builder.listener(new OnBMClickListener() {
-                @Override
-                public void onBoomButtonClick(int index) {
-                    switch (index) {
-                        case 0: {
-                            if (checkExist(sqLiteHelper.getAllSong(), song)) {
-                                removeDataBase(sqLiteHelper, song);
-                                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                            } else {
-                                addToDataBase(sqLiteHelper, song);
-                                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        }
-                    }
-                }
-            });
-            builder.normalImageRes(listImageBoom[i]);
-            builder.imagePadding(new Rect(10, 10, 10, 10));
-            viewHolderVideo.boomButtonMore.addBuilder(builder);
+        if (viewHolder instanceof ViewHolderVideoHeader) {
+            ViewHolderVideoHeader viewHolderVideoHeader = (ViewHolderVideoHeader) viewHolder;
+//            Glide.with(context).load(songs.get(position).getUrlImageThumb()).into(viewHolderVideoHeader.imageThumb);
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_image);
+            ((ViewHolderVideoHeader) viewHolder).imageThumb.startAnimation(animation);
+        } else if (viewHolder instanceof ViewHolderVideo) {
+            Song song = songs.get(position - 1);
+            ViewHolderVideo viewHolderVideo = (ViewHolderVideo) viewHolder;
+            bindItem(viewHolderVideo, song);
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return songs.size();
+        return songs.size() + 1;
     }
 
-    public void removeDataBase(SQLiteHelper sqLiteHelper, Song song) {
-        for (Song song1 : sqLiteHelper.getAllSong()) {
-            if (song.getVideoId().equals(song1.getVideoId())) {
-                if (ViewPageFragment.viewPager.getCurrentItem() == 3) {
-                    songs.remove(song);
-                    HomeAdapter.this.notifyDataSetChanged();
-                }
-                sqLiteHelper.deleteSong(song.getVideoId());
-                break;
-            }
-        }
+    OnClickButton onClickButton;
+
+    public interface OnClickButton {
+        public void OnClickBtnMic(Button btnMic);
+
+        public void OnClickBtnRecoder(Button btnRecoder);
+
+        public void OnClickBtnEqualizer(Button btnEqualizer);
     }
 
-
-    public void addToDataBase(SQLiteHelper sqLiteHelper, Song song) {
-        ArrayList<Song> songDataBase = sqLiteHelper.getAllSong();
-        if (songDataBase.size() == 0) {
-            sqLiteHelper.addSong(song);
-        } else {
-            if (!checkExist(songDataBase, song)) {
-                sqLiteHelper.addSong(song);
-            }
-        }
+    public void setClickButton(OnClickButton onClickButton) {
+        this.onClickButton = onClickButton;
     }
 
 
-    public boolean checkExist(ArrayList<Song> songs, Song song) {
-        boolean check = false;
-        for (int i = 0; i < songs.size(); i++) {
-            if (song.getVideoId().equals(songs.get(i).getVideoId())) {
-                check = true;
-                break;
-            }
-        }
-        return check;
-    }
-
-    class ViewHolderVideo extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolderVideoHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageThumb;
-        private TextView tittle;
-        private TextView nameChannel;
-        private TextView timeUpLoad;
-        private BoomMenuButton boomButtonMore;
+        private Button btnRecoder, btnMic, btnEqualizer;
 
-        public ViewHolderVideo(View itemView) {
+        public ViewHolderVideoHeader(View itemView) {
             super(itemView);
-            imageThumb = (ImageView) itemView.findViewById(R.id.imageThumb);
-            tittle = (TextView) itemView.findViewById(R.id.tittle);
-            nameChannel = (TextView) itemView.findViewById(R.id.nameChannel);
-            timeUpLoad = (TextView) itemView.findViewById(R.id.timeUpLoad);
-            boomButtonMore = (BoomMenuButton) itemView.findViewById(R.id.idBoomMenu);
+            btnRecoder = (Button) itemView.findViewById(R.id.btnRecoder);
+            btnEqualizer = (Button) itemView.findViewById(R.id.btnEqualizer);
+            btnMic = (Button) itemView.findViewById(R.id.btnMic);
+            imageThumb = (ImageView) itemView.findViewById(R.id.idImageAnimation);
 
-            itemView.setOnClickListener(this);
+
+            btnRecoder.setOnClickListener(this);
+            btnEqualizer.setOnClickListener(this);
+            btnMic.setOnClickListener(this);
+
+
         }
-
 
         @Override
         public void onClick(View v) {
-            if (onItemClickRecycle != null) {
-                onItemClickRecycle.OnItemClick(v, getPosition());
+            switch (v.getId()) {
+                case R.id.btnMic: {
+                    onClickButton.OnClickBtnMic(btnMic);
+                    break;
+                }
+                case R.id.btnEqualizer: {
+                    onClickButton.OnClickBtnEqualizer(btnEqualizer);
+                    break;
+                }
+                case R.id.btnRecoder: {
+                    onClickButton.OnClickBtnRecoder(btnRecoder);
+                    break;
+                }
             }
         }
-    }
-
-    OnItemClickRecycle onItemClickRecycle;
-
-    public void setOnItemClickRecycle(OnItemClickRecycle onItemClickRecycle) {
-        this.onItemClickRecycle = onItemClickRecycle;
-    }
 
 
-    public interface OnItemClickRecycle {
-        void OnItemClick(View view, int position);
     }
 }

@@ -1,24 +1,30 @@
 package android.beotron.tieuhoan.kara_2;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -41,37 +47,25 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer playVideo;
     private boolean isFullScreen;
-    private Button btnRecoder, btnMic, btnEqualizer;
     private RecyclerView recyclerView;
-
-    private ListView listView;
     private AudioManager audioManager;
+
+    boolean isRecoder;
+    Recoder recoder = new Recoder(VideoYouTube.this);
+    Thread thread;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_you_tube);
 
-
-        popupWindow = new PopupWindow(VideoYouTube.this);
-
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         playVideo();
-        setUpButton();
         setUpRecycle();
     }
 
-    public void setUpButton() {
-
-        btnMic = (Button) findViewById(R.id.btnMic);
-        btnEqualizer = (Button) findViewById(R.id.btnEqualizer);
-        btnRecoder = (Button) findViewById(R.id.btnRecoder);
-        btnRecoder.setOnClickListener(this);
-        btnEqualizer.setOnClickListener(this);
-        btnMic.setOnClickListener(this);
-
-    }
 
     public void playVideo() {
         Intent intent = getIntent();
@@ -80,6 +74,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         if (bundle != null) {
             song = (Song) bundle.getSerializable("SONG");
             songs = (ArrayList<Song>) bundle.getSerializable("SONGS");
+            Log.e("video", song.getTittle());
         }
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.videoYoutube);
@@ -95,10 +90,28 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         adapte.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
             @Override
             public void OnItemClick(View view, int position) {
-                playVideo.loadVideo(songs.get(position).getVideoId());
+                playVideo.loadVideo(songs.get(position - 1).getVideoId());
+            }
+        });
+        adapte.setClickButton(new HomeAdapter.OnClickButton() {
+            @Override
+            public void OnClickBtnMic(Button btnMic) {
+                eventBtnMic(btnMic);
+            }
+
+            @Override
+            public void OnClickBtnRecoder(Button btnRecoder) {
+
+            }
+
+            @Override
+            public void OnClickBtnEqualizer(Button btnEqualizer) {
+                eventBtnEqualizer();
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
+
+
     }
 
     int seek;
@@ -134,66 +147,13 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        playVideo.loadVideo(songs.get(i).getVideoId());
+        playVideo.loadVideo(songs.get(i - 1).getVideoId());
     }
 
-    boolean isRecoder;
-    Recoder recoder = new Recoder(VideoYouTube.this);
-    Thread thread;
-    private PopupWindow popupWindow;
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnMic: {
-                if (audioManager.isWiredHeadsetOn()) {
-                    if (isRecoder) {
-                        isRecoder = false;
-                        Toast.makeText(VideoYouTube.this, "Dừng", Toast.LENGTH_SHORT).show();
-                        btnMic.setText("Mic");
-                        btnMic.setBackgroundResource(R.drawable.btnmic_not_active);
-                        recoder.setCheckRecord(isRecoder);
-                        recoder.record.release();
-                        recoder.track.release();
-                        thread.interrupt();
-                    } else {
-                        isRecoder = true;
-                        Toast.makeText(VideoYouTube.this, "Bắt đầu", Toast.LENGTH_SHORT).show();
-                        btnMic.setText("Pause");
-                        btnMic.setBackgroundResource(R.drawable.btnmic_is_active);
-                        thread = new Thread(recoder);
-                        thread.start();
-                    }
-                } else {
-                    Dialog dialog = new Dialog(VideoYouTube.this);
-                    dialog.setTitle("Kết nối tai nghe hoặc loa bluetooth");
-                    dialog.show();
-                }
 
-                break;
-            }
-            case R.id.btnEqualizer: {
-                if (isRecoder) {
-                    Dialog dialog = new Dialog(VideoYouTube.this);
-                    recoder.equalizer();
-                    AdapterChinhAm adapterChinhAm = new AdapterChinhAm(VideoYouTube.this, recoder.getChinhAms(), recoder.getEqualizer());
-                    dialog.setContentView(R.layout.dialog_chinh_am);
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.height = 900;
-                    dialog.getWindow().setAttributes(lp);
-                    listView = (ListView) dialog.findViewById(R.id.listViewFre);
-                    listView.setAdapter(adapterChinhAm);
-                    dialog.show();
-
-                }
-
-
-                break;
-            }
-            case R.id.btnRecoder: {
-                break;
-            }
-        }
     }
 
 
@@ -222,6 +182,63 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
         } else {
             recoder.setCheckRecord(false);
             super.onBackPressed();
+        }
+    }
+
+    public void eventBtnMic(Button btnMic) {
+        if (audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn()) {
+            if (isRecoder) {
+                isRecoder = false;
+                Toast.makeText(this, "Dừng", Toast.LENGTH_SHORT).show();
+                btnMic.setText("Mic");
+                btnMic.setBackgroundResource(R.drawable.btnmic_not_active);
+                recoder.setCheckRecord(isRecoder);
+//                recoder.record.release();
+//                recoder.track.release();
+                thread.interrupt();
+            } else {
+                isRecoder = true;
+                Toast.makeText(this, "Bắt đầu", Toast.LENGTH_SHORT).show();
+                btnMic.setText("Pause");
+                btnMic.setBackgroundResource(R.drawable.btnmic_is_active);
+                thread = new Thread(recoder);
+                thread.start();
+            }
+        } else {
+            TextView textViewTitle = new TextView(this);
+            textViewTitle.setText("Chú ý");
+            textViewTitle.setGravity(Gravity.CENTER);
+            textViewTitle.setTextColor(Color.RED);
+            textViewTitle.setTextSize(20);
+            TextView textView = new TextView(this);
+            textView.setText("Kết nối tai nghe hoặc loa bluetooth");
+            textView.setGravity(Gravity.CENTER);
+            textView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textViewTitle.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setTextSize(15);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(textView);
+            builder.setCustomTitle(textViewTitle);
+            builder.show();
+
+
+        }
+    }
+
+    public void eventBtnEqualizer() {
+        if (isRecoder) {
+            Dialog dialog = new Dialog(this);
+            recoder.equalizer();
+            AdapterChinhAm adapterChinhAm = new AdapterChinhAm(this, recoder.getChinhAms(), recoder.getEqualizer());
+            dialog.setContentView(R.layout.dialog_chinh_am);
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.height = 900;
+            dialog.getWindow().setAttributes(lp);
+            listView = (ListView) dialog.findViewById(R.id.listViewFre);
+            listView.setAdapter(adapterChinhAm);
+            dialog.show();
+
         }
     }
 }

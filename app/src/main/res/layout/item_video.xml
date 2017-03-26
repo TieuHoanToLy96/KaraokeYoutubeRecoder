@@ -2,103 +2,117 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="110dp"
+              android:layout_height="120dp"
+              xmlns:card_view="http://schemas.android.com/tools"
               android:orientation="horizontal"
               android:padding="5dp"
               android:weightSum="2.5">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-       >
-
-        <com.google.android.youtube.player.YouTubeThumbnailView
-            android:id="@+id/imageThumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/hello"/>
-        />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.5"
-        android:orientation="vertical"
-
+        android:background="@null"
+        card_view:cardUseCompatPadding="true"
         >
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="8">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tittle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="6"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="2"
-                android:padding="5dp"
-                android:scrollbars="horizontal"
-                android:text="[VIDEO LYRIC] Thái Bình Mồ Hôi Rơi - Sơn Tùng MTP"
-                android:textAlignment="viewStart"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textSize="15dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
 
-
-            <com.nightonke.boommenu.BoomMenuButton
-                android:id="@+id/idBoomMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                app:bmb_buttonEnum="simpleCircle"
-                app:bmb_buttonPlaceEnum="buttonPlace_sc_3_3"
-                app:bmb_inList="true"
-                app:bmb_piecePlaceEnum="piecePlace_dot_3_3"
-                app:bmb_shadowEffect="true"/>
+            <com.google.android.youtube.player.YouTubeThumbnailView
+                android:id="@+id/imageThumb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/hello"/>
             />
-
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
             android:orientation="vertical"
-            android:padding="5dp"
 
             >
 
-            <TextView
-                android:id="@+id/nameChannel"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:ellipsize="end"
-                android:gravity="top"
-                android:maxLines="1"
-                android:text="Tên Chanel"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="13dp"/>
+                android:orientation="horizontal"
+                android:weightSum="8">
 
-            <TextView
-                android:id="@+id/timeUpLoad"
+                <TextView
+                    android:id="@+id/tittle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="6"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:scrollbars="horizontal"
+                    android:text="[VIDEO LYRIC] Thái Bình Mồ Hôi Rơi - Sơn Tùng MTP"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textSize="15dp"/>
+
+
+                <com.nightonke.boommenu.BoomMenuButton
+                    android:id="@+id/idBoomMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:bmb_buttonEnum="simpleCircle"
+                    app:bmb_buttonPlaceEnum="buttonPlace_sc_3_3"
+                    app:bmb_inList="true"
+                    app:bmb_piecePlaceEnum="piecePlace_dot_3_3"
+                    app:bmb_shadowEffect="true"/>
+                />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:text="Thời gian up"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="12dp"/>
+                android:orientation="vertical"
+                android:padding="5dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/nameChannel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:maxLines="1"
+                    android:text="Tên Chanel"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="13dp"/>
+
+                <TextView
+                    android:id="@+id/timeUpLoad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Thời gian up"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="12dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
-
-
+    </android.support.v7.widget.CardView>
 </LinearLayout>

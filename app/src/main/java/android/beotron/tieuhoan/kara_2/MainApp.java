@@ -117,17 +117,19 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
         toolbar.setTitle("Béo Tròn");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-
-
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().getDisplayOptions();
+
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
+
         if (menuItem.getItemId() == android.R.id.home) {
             onBackPressed();
+            Toast.makeText(MainApp.this, "Click back arrow", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -146,7 +148,8 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
         // find by id
         searchItem = menu.findItem(R.id.searchView);
         searchView = (SearchView) searchItem.getActionView();
-
+        searchView.setBackgroundResource(R.drawable.btnmic_not_active);
+        searchView.setQueryHint("Search");
         menuItem = menu.findItem(R.id.menu);
         menuItem.setOnMenuItemClickListener(this);
 
@@ -172,8 +175,10 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
+
         } else {
             if (!doublePressBack) {
+                ViewPageFragment.viewPager.setCurrentItem(0);
                 doublePressBack = true;
                 Toast.makeText(MainApp.this, "Ấn back lần nữa để thoát", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
@@ -204,7 +209,7 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(position == 0){
+                        if (position == 0) {
 //                            FragmentControl.goToFragmentAddBackStack();
                         }
                     }

@@ -46,7 +46,6 @@ public class SingerGlobal extends SingerFragment {
                 Singer singer = new Singer();
                 singer.setImageSinger(HangSo.listSingerGlobal[i][0]);
                 singer.setNameSinger(HangSo.listSingerGlobal[i][1]);
-                Log.e("tieuhoan ", singer.getNameSinger());
                 singers.add(singer);
             }
         }

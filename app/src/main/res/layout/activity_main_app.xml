@@ -33,15 +33,6 @@
                 app:layout_scrollFlags="scroll|enterAlways"></android.support.v7.widget.Toolbar>
 
 
-            <!--<android.support.design.widget.TabLayout-->
-            <!--android:id="@+id/idTabLayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_below="@+id/toolBar"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:minHeight="?attr/actionBarSize"-->
-            <!--app:tabGravity="center"-->
-            <!--app:tabMode="scrollable"></android.support.design.widget.TabLayout>-->
         </android.support.design.widget.AppBarLayout>
 
         <FrameLayout

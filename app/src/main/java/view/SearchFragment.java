@@ -1,5 +1,6 @@
 package view;
 
+import android.app.Dialog;
 import android.beotron.tieuhoan.kara_2.MainApp;
 import android.beotron.tieuhoan.kara_2.R;
 import android.beotron.tieuhoan.kara_2.VideoYouTube;
@@ -20,11 +21,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import adapter.AdapterListVideo;
 import adapter.HomeAdapter;
 import model.Song;
 import ulti.HangSo;
@@ -40,7 +43,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     private ArrayList<Song> songsResult;
     private View view;
     private String pathSearch;
-    private HomeAdapter homeAdapter;
+    private AdapterListVideo adapterListVideo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,50 +81,38 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 songsResult = ((ArrayList<Song>) msg.obj);
                 if (songsResult != null) {
                     setUpRecycle();
+                } else {
+                    Dialog dialog = new Dialog(getActivity());
+                    dialog.setTitle("Error");
+                    dialog.show();
+                    dialog.setCancelable(true);
                 }
             }
         }
     };
 
     public void setUpRecycle() {
-        homeAdapter = new HomeAdapter(songsResult, getActivity());
+        adapterListVideo = new AdapterListVideo(songsResult, getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.idSongResultSearch);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setAdapter(adapterListVideo);
         recyclerView.setLayoutManager(linearLayoutManager);
-        homeAdapter.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
+        adapterListVideo.setOnItemClickRecycle(new HomeAdapter.OnItemClickRecycle() {
             @Override
             public void OnItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("SONG", songsResult.get(i));
+                Log.e("song", songsResult.get(position).getTittle());
+                bundle.putSerializable("SONG", songsResult.get(position));
                 bundle.putSerializable("SONGS", songsResult);
                 Intent intent = new Intent(getActivity(), VideoYouTube.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
+
             }
         });
 
     }
 
-//    public void setUpListView() {
-//        homeAdapter = new HomeAdapter(getActivity(), songsResult);
-//        listView = (ListView) view.findViewById(R.id.idSongResultSearch);
-//        listView.setAdapter(homeAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("SONG", songsResult.get(i));
-//                bundle.putSerializable("SONGS", songsResult);
-//                Intent intent = new Intent(getActivity(), VideoYouTube.class);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//            }
-//        });
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            listView.setNestedScrollingEnabled(true);
-//        }
-//    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -191,7 +182,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
             if (msg.what == HangSo.KEY_HANDLER2) {
                 super.handleMessage(msg);
                 songsResult.addAll((ArrayList<Song>) msg.obj);
-                homeAdapter.notifyDataSetChanged();
+                adapterListVideo.notifyDataSetChanged();
             }
         }
     };
