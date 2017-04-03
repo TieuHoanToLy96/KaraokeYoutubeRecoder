@@ -34,7 +34,7 @@ public class FavoriteFragment extends Fragment implements HomeAdapter.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
-        songs = sqLiteHelper.getAllSong();
+        songs = sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE);
 
     }
 

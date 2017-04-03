@@ -52,6 +52,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "\t`VIDEOID`\tTEXT,\n" +
                 "\t`FAVORITE`\tTEXT\n" +
                 ");";
+        String CREATE_SEEN = "CREATE TABLE `SEEN` (\n" +
+                "\t`ID`\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                "\t`TITLE`\tTEXT,\n" +
+                "\t`NAMECHANNEL`\tTEXT,\n" +
+                "\t`TIMEUPLOAD`\tTEXT,\n" +
+                "\t`URLIMAGETHUMB`\tTEXT,\n" +
+                "\t`VIDEOID`\tTEXT,\n" +
+                "\t`FAVORITE`\tTEXT\n" +
+                ");";
+
 
         String CREATE_SINGER_VIETNAM = "CREATE TABLE `SINGERVIETNAM` (\n" +
                 "\t`NAMESINGER`\tTEXT,\n" +
@@ -64,16 +74,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 ");";
 
         db.execSQL(CREATE_FAVORITE);
+        db.execSQL(CREATE_SEEN);
         db.execSQL(CREATE_SINGER_VIETNAM);
         db.execSQL(CREATE_SINGER_GLOBAL);
 
     }
 
-    public ArrayList<Song> getAllSong() {
+    public ArrayList<Song> getAllSong(String table) {
         ArrayList<Song> songs = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String colums[] = {SQLiteHelper.ID, SQLiteHelper.TITLE, SQLiteHelper.NAMECHANNEL, SQLiteHelper.TIMEUPLOAD, SQLiteHelper.URLIMAGETHUMB, SQLiteHelper.VIDEOID, SQLiteHelper.FAVORITE};
-        Cursor cursor = sqLiteDatabase.query(SQLiteHelper.TABLEFVORITE, colums, null, null, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(table, colums, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Song song = new Song();
             song.setTittle(cursor.getString(cursor.getColumnIndex(SQLiteHelper.TITLE)));

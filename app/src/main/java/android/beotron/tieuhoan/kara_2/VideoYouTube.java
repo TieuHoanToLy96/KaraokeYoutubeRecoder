@@ -9,7 +9,9 @@ import android.content.pm.PackageManager;
 
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,10 +34,18 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import adapter.AdapterChinhAm;
 import adapter.HomeAdapter;
+import model.RecoderFile;
 import model.Song;
 import ulti.HangSo;
 import ulti.Recoder;
@@ -50,7 +60,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     private RecyclerView recyclerView;
     private AudioManager audioManager;
 
-    boolean isRecoder;
+    boolean isMic;
     Recoder recoder = new Recoder(VideoYouTube.this);
     Thread thread;
     private ListView listView;
@@ -101,7 +111,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
             @Override
             public void OnClickBtnRecoder(Button btnRecoder) {
-
+                eventBtnRecoder(btnRecoder);
             }
 
             @Override
@@ -158,7 +168,7 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
 
 
     private boolean permissionToRecordAccepted = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     @Override
@@ -186,48 +196,53 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
     public void eventBtnMic(Button btnMic) {
-        if (audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn()) {
-            if (isRecoder) {
-                isRecoder = false;
-                Toast.makeText(this, "Dừng", Toast.LENGTH_SHORT).show();
-                btnMic.setText("Mic");
-                btnMic.setBackgroundResource(R.drawable.btnmic_not_active);
-                recoder.setCheckRecord(isRecoder);
-//                recoder.record.release();
-//                recoder.track.release();
-                thread.interrupt();
-            } else {
-                isRecoder = true;
-                Toast.makeText(this, "Bắt đầu", Toast.LENGTH_SHORT).show();
-                btnMic.setText("Pause");
-                btnMic.setBackgroundResource(R.drawable.btnmic_is_active);
-                thread = new Thread(recoder);
-                thread.start();
-            }
+//        if (audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn()) {
+        if (isMic) {
+            isMic = false;
+            Toast.makeText(this, "Dừng", Toast.LENGTH_SHORT).show();
+            btnMic.setText("Mic");
+            btnMic.setBackgroundResource(R.drawable.btnmic_not_active);
+            recoder.setCheckRecord(isMic);
+            recoder.record.release();
+            recoder.track.release();
+            thread.interrupt();
         } else {
-            TextView textViewTitle = new TextView(this);
-            textViewTitle.setText("Chú ý");
-            textViewTitle.setGravity(Gravity.CENTER);
-            textViewTitle.setTextColor(Color.RED);
-            textViewTitle.setTextSize(20);
-            TextView textView = new TextView(this);
-            textView.setText("Kết nối tai nghe hoặc loa bluetooth");
-            textView.setGravity(Gravity.CENTER);
-            textView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textViewTitle.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(15);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(textView);
-            builder.setCustomTitle(textViewTitle);
-            builder.show();
-
-
+            isMic = true;
+            Toast.makeText(this, "Bắt đầu", Toast.LENGTH_SHORT).show();
+            audioManager.setMode(AudioManager.MODE_NORMAL);
+            btnMic.setText("Pause");
+            btnMic.setBackgroundResource(R.drawable.btnmic_is_active);
+            thread = new Thread(recoder);
+            thread.start();
         }
+//    }
+//
+//    else
+//
+//    {
+//        TextView textViewTitle = new TextView(this);
+//        textViewTitle.setText("Chú ý");
+//        textViewTitle.setGravity(Gravity.CENTER);
+//        textViewTitle.setTextColor(Color.RED);
+//        textViewTitle.setTextSize(20);
+//        TextView textView = new TextView(this);
+//        textView.setText("Kết nối tai nghe hoặc loa bluetooth");
+//        textView.setGravity(Gravity.CENTER);
+//        textView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        textViewTitle.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        textView.setTextSize(15);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(textView);
+//        builder.setCustomTitle(textViewTitle);
+//        builder.show();
+//
+//
+//    }
     }
 
     public void eventBtnEqualizer() {
-        if (isRecoder) {
+        if (isMic) {
             Dialog dialog = new Dialog(this);
             recoder.equalizer();
             AdapterChinhAm adapterChinhAm = new AdapterChinhAm(this, recoder.getChinhAms(), recoder.getEqualizer());
@@ -240,5 +255,80 @@ public class VideoYouTube extends YouTubeBaseActivity implements YouTubePlayer.O
             dialog.show();
 
         }
+    }
+
+    private boolean isRecoder;
+
+
+    public void eventBtnRecoder(Button btnRecoder) {
+        if (!isRecoder) {
+            Toast.makeText(this, "Bắt đầu", Toast.LENGTH_SHORT).show();
+            btnRecoder.setText("Pause");
+            btnRecoder.setBackgroundResource(R.drawable.btnmic_is_active);
+            isRecoder = true;
+            recoder(song.getTittle());
+
+        } else if (isRecoder) {
+            Toast.makeText(this, "Đã lưu vào bộ nhớ", Toast.LENGTH_SHORT).show();
+            btnRecoder.setText("Recoder");
+            btnRecoder.setBackgroundResource(R.drawable.btnmic_not_active);
+            isRecoder = false;
+
+            try {
+                mediaRecorder.stop();
+                mediaRecorder.release();
+
+            } catch (RuntimeException e) {
+            }
+
+//            for (HashMap hashMap : getAllRecoder()) {
+//                Log.e("tieuhoan recoder", hashMap.get("songTitle").toString());
+//                Log.e("tieuhoan recoder", hashMap.get("date").toString());
+//            }
+//
+        } else {
+            Toast.makeText(this, "Kết nối tai nghe", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private MediaRecorder mediaRecorder;
+    String path;
+
+
+    public static final String FOLDER = "TieuHoan";
+    public static final String PATH_FOLDER = Environment.getExternalStorageDirectory() + "/" + FOLDER;
+
+    public void recoder(String tittleRecoder) {
+        try {
+
+            File myDirectory = new File(Environment.getExternalStorageDirectory(), FOLDER);
+            if (!myDirectory.exists()) {
+                myDirectory.mkdirs();
+            }
+
+            path = PATH_FOLDER + "/" + tittleRecoder + ".mp3";
+            for (int i = 0; i < recoder.getAllRecoder().size(); i++) {
+                if (path.equals(recoder.getAllRecoder().get(i).getPathRecoderFile())) {
+                    path = PATH_FOLDER + "/" + tittleRecoder + i + ".mp3"                       ;
+                    break;
+                }
+            }
+
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+            mediaRecorder.setOutputFile(path);
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+        } catch (
+                IOException e
+                )
+
+        {
+            e.printStackTrace();
+        }
+
     }
 }

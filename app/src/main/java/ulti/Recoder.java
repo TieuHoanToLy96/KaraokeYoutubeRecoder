@@ -12,13 +12,20 @@ import android.media.MediaRecorder;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import adapter.AdapterChinhAm;
 import model.ChinhAm;
+import model.RecoderFile;
+import model.Song;
 
 /**
  * Created by TieuHoan on 24/02/2017.
@@ -51,9 +58,42 @@ public class Recoder implements Runnable {
         return chinhAms;
     }
 
+    public Recoder() {
+    }
+
     public Recoder(Context context) {
         this.context = context;
         chinhAms = new ArrayList<>();
+
+    }
+
+    public ArrayList<RecoderFile> getAllRecoder() {
+        File home = new File(VideoYouTube.PATH_FOLDER);
+        ArrayList<RecoderFile> recoderFiles = new ArrayList<>();
+        if (home.listFiles(new FileFilter()).length > 0) {
+            for (File file : home.listFiles(new FileFilter())) {
+                RecoderFile recoderFile = new RecoderFile();
+                Date date = new Date(file.lastModified());
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(date);
+
+                recoderFile.setNameRecoderFile(file.getName().substring(0, (file.getName().length() - 4)));
+                recoderFile.setDateRecoderFile(formattedDate);
+                recoderFile.setPathRecoderFile(file.getPath());
+
+                // Adding each song to SongList
+                recoderFiles.add(recoderFile);
+            }
+        }
+
+        return recoderFiles;
+    }
+
+    public class FileFilter implements FilenameFilter {
+        @Override
+        public boolean accept(File dir, String name) {
+            return (name.endsWith(".mp3") || name.endsWith(".MP3"));
+        }
 
     }
 
@@ -120,7 +160,8 @@ public class Recoder implements Runnable {
         }
     }
 
-//    private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
+    //    private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
+
 
     @Override
     public void run() {

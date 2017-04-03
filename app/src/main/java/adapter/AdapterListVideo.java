@@ -17,6 +17,7 @@ import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
+import java.sql.SQLInput;
 import java.util.ArrayList;
 
 import model.Song;
@@ -87,7 +88,7 @@ public class AdapterListVideo extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public void removeDataBase(SQLiteHelper sqLiteHelper, Song song) {
-        for (Song song1 : sqLiteHelper.getAllSong()) {
+        for (Song song1 : sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE)) {
             if (song.getVideoId().equals(song1.getVideoId())) {
                 if (ViewPageFragment.viewPager.getCurrentItem() == 3) {
                     songs.remove(song);
@@ -101,7 +102,7 @@ public class AdapterListVideo extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public void addToDataBase(SQLiteHelper sqLiteHelper, Song song) {
-        ArrayList<Song> songDataBase = sqLiteHelper.getAllSong();
+        ArrayList<Song> songDataBase = sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE);
         if (songDataBase.size() == 0) {
             sqLiteHelper.addSong(song);
         } else {
@@ -147,7 +148,7 @@ public class AdapterListVideo extends RecyclerView.Adapter<RecyclerView.ViewHold
             @Override
             public void onClick(View v) {
                 viewHolderVideo.boomButtonMore.boom();
-                if (checkExist(sqLiteHelper.getAllSong(), song)) {
+                if (checkExist(sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE), song)) {
                     listImageBoom = HangSo.imageResourcesNotFavorite;
                 } else {
                     listImageBoom = HangSo.imageResourcesFavorite;
@@ -156,7 +157,7 @@ public class AdapterListVideo extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         });
 
-        if (checkExist(sqLiteHelper.getAllSong(), song)) {
+        if (checkExist(sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE), song)) {
             listImageBoom = HangSo.imageResourcesNotFavorite;
         } else {
             listImageBoom = HangSo.imageResourcesFavorite;
@@ -169,7 +170,7 @@ public class AdapterListVideo extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onBoomButtonClick(int index) {
                     switch (index) {
                         case 0: {
-                            if (checkExist(sqLiteHelper.getAllSong(), song)) {
+                            if (checkExist(sqLiteHelper.getAllSong(SQLiteHelper.TABLEFVORITE), song)) {
                                 removeDataBase(sqLiteHelper, song);
                                 Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
                             } else {

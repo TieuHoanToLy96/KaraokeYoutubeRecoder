@@ -35,6 +35,7 @@ import ulti.HangSo;
 import ulti.Json;
 import view.FavoriteFragment;
 import view.HomeFragment;
+import view.ListRecoderFragment;
 import view.SearchFragment;
 import view.SingerFragment;
 import view.SingerGlobal;
@@ -118,7 +119,6 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().getDisplayOptions();
 
 
@@ -129,6 +129,7 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
 
         if (menuItem.getItemId() == android.R.id.home) {
             onBackPressed();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             Toast.makeText(MainApp.this, "Click back arrow", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -161,6 +162,7 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 FragmentControl.goToFragmentAddBackStack(R.id.idFrameFather, searchFragment, MainApp.this, getClass().getName());
             }
         });
@@ -199,9 +201,11 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.menu: {
+                final Dialog dialog = new Dialog(this);
+                dialog.setTitle("Tùy chọn");
                 ArrayList<String> test = new ArrayList<>();
-                test.add("Cài đặt");
                 test.add("File ghi âm");
+                test.add("Cài đặt");
                 test.add("Thông tin");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, test);
                 ListView listView = new ListView(this);
@@ -210,12 +214,12 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (position == 0) {
-//                            FragmentControl.goToFragmentAddBackStack();
+                            FragmentControl.goToFragmentAddBackStack(R.id.idFrameLayout, new ListRecoderFragment(), MainApp.this, getClass().getName());
                         }
+                        dialog.dismiss();
                     }
                 });
-                Dialog dialog = new Dialog(this);
-                dialog.setTitle("Tùy chọn");
+
                 dialog.setContentView(listView);
                 dialog.show();
 
