@@ -129,15 +129,11 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
 
         if (menuItem.getItemId() == android.R.id.home) {
             onBackPressed();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            Toast.makeText(MainApp.this, "Click back arrow", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(menuItem);
     }
 
-
-    ImageButton imageButton;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,8 +173,9 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
-
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } else {
+
             if (!doublePressBack) {
                 ViewPageFragment.viewPager.setCurrentItem(0);
                 doublePressBack = true;
@@ -213,8 +210,20 @@ public class MainApp extends AppCompatActivity implements MenuItem.OnMenuItemCli
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (position == 0) {
-                            FragmentControl.goToFragmentAddBackStack(R.id.idFrameLayout, new ListRecoderFragment(), MainApp.this, getClass().getName());
+
+                        switch (position) {
+                            case 0: {
+                                FragmentControl.goToFragmentAddBackStack(R.id.idFrameLayout, new ListRecoderFragment(), MainApp.this, getClass().getName());
+                                break;
+                            }
+                            case 1: {
+
+                                break;
+                            }
+                            case 2: {
+
+                                break;
+                            }
                         }
                         dialog.dismiss();
                     }

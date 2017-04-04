@@ -92,4 +92,11 @@ public class ListRecoderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return true;
         }
     }
+
+
+    public void swap(ArrayList<RecoderFile> recoderFiles) {
+        this.recoderFiles.clear();
+        this.recoderFiles.addAll(recoderFiles);
+        notifyDataSetChanged();
+    }
 }

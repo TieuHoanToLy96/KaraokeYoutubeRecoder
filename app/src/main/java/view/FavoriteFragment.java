@@ -63,4 +63,12 @@ public class FavoriteFragment extends Fragment implements HomeAdapter.OnItemClic
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+
+        }
+    }
 }

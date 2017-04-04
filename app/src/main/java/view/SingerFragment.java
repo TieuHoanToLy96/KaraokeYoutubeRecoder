@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import adapter.SingerAdapter;
 import model.Singer;
+import model.Song;
 import ulti.FragmentControl;
 import ulti.HangSo;
 
@@ -22,13 +23,13 @@ import ulti.HangSo;
  * Created by TieuHoan on 24/02/2017.
  */
 
-public class SingerFragment extends Fragment  {
+public class SingerFragment extends Fragment {
 
     public ArrayList<Singer> singers;
     public Context context;
 
 
-    public void setUpRecycleView(View view) {
+    public void setUpRecycleView(View view, final ArrayList<Singer> singers) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         SingerAdapter singerAdapter = new SingerAdapter(singers, context);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.idListViewSinger);
@@ -52,7 +53,6 @@ public class SingerFragment extends Fragment  {
 
 
     }
-
 
 
 }

@@ -23,12 +23,25 @@ public class SingerGlobal extends SingerFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+        Log.e("tieuhoan", "onCreate singerglobal");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.singer_fragment, null);
+        Log.e("tieuhoan", "onCreateView singerglobal");
+        if (singers == null) {
+            singers = new ArrayList<>();
+            for (int i = 0; i < HangSo.listSingerGlobal.length; i++) {
+                Singer singer = new Singer();
+                singer.setImageSinger(HangSo.listSingerGlobal[i][0]);
+                singer.setNameSinger(HangSo.listSingerGlobal[i][1]);
+                singers.add(singer);
+            }
+        }
+        setUpRecycleView(view, singers);
+
 //        SQLiteHelper sqLiteHelper = new SQLiteHelper(context);
 //
 //        if(sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERGLOBAL) == null){
@@ -40,27 +53,21 @@ public class SingerGlobal extends SingerFragment {
 //                sqLiteHelper.addSinger(singer, SQLiteHelper.TABLESINGERGLOBAL);
 //            }
 //        }
-        if (singers == null) {
-            singers = new ArrayList<>();
-            for (int i = 0; i < HangSo.listSingerGlobal.length; i++) {
-                Singer singer = new Singer();
-                singer.setImageSinger(HangSo.listSingerGlobal[i][0]);
-                singer.setNameSinger(HangSo.listSingerGlobal[i][1]);
-                singers.add(singer);
-            }
-        }
-
 
 //        singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERGLOBAL);
-//        for (Singer singer : singers) {
-//            Log.e("tieuhoan ", singer.getNameSinger());
-//        }
-
-        setUpRecycleView(view);
 //            sqLiteHelper.close();
 
         return view;
 
 
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.e("tieuhoan", "setUserVisibleHint singerglobal");
+        }
+    }
 }
+

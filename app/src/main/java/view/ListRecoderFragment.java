@@ -60,12 +60,12 @@ public class ListRecoderFragment extends Fragment {
             @Override
             public void OnClickItem(View view, int position) {
 
-                Log.e("tieuhoan path", recoderFiles.get(position).getPathRecoderFile());
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 File file = new File(recoderFiles.get(position).getPathRecoderFile());
                 intent.setDataAndType(Uri.fromFile(file), "audio/*");
                 startActivity(intent);
+
             }
         });
         listRecoderAdapter.setOnLongClickItemRecycleView(new ListRecoderAdapter.OnLongItemClickRecycleView() {
@@ -111,9 +111,14 @@ public class ListRecoderFragment extends Fragment {
                                 File fileRename = new File(VideoYouTube.PATH_FOLDER, editTextRename.getText().toString() + ".mp3");
                                 file.renameTo(fileRename);
 
-//                                recoderFiles.clear();
+                                recoderFiles.clear();
                                 recoderFiles = recoder.getAllRecoder();
-                                listRecoderAdapter.notifyDataSetChanged();
+                                for (RecoderFile recoderFile1 : recoder.getAllRecoder()) {
+                                    Log.e("tieuhoan recoder change", recoderFile1.getNameRecoderFile());
+
+                                }
+                                listRecoderAdapter.swap(recoderFiles);
+
 
                                 dialog1.dismiss();
                             }

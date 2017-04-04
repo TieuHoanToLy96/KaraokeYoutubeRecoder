@@ -91,7 +91,8 @@ public class HomeAdapter extends AdapterListVideo {
             ViewHolderVideoHeader viewHolderVideoHeader = (ViewHolderVideoHeader) viewHolder;
 //            Glide.with(context).load(songs.get(position).getUrlImageThumb()).into(viewHolderVideoHeader.imageThumb);
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_image);
-            ((ViewHolderVideoHeader) viewHolder).imageThumb.startAnimation(animation);
+            viewHolderVideoHeader.imageThumb.startAnimation(animation);
+
         } else if (viewHolder instanceof ViewHolderVideo) {
             Song song = songs.get(position - 1);
             ViewHolderVideo viewHolderVideo = (ViewHolderVideo) viewHolder;
@@ -130,7 +131,6 @@ public class HomeAdapter extends AdapterListVideo {
             btnEqualizer = (Button) itemView.findViewById(R.id.btnEqualizer);
             btnMic = (Button) itemView.findViewById(R.id.btnMic);
             imageThumb = (ImageView) itemView.findViewById(R.id.idImageAnimation);
-
 
             btnRecoder.setOnClickListener(this);
             btnEqualizer.setOnClickListener(this);

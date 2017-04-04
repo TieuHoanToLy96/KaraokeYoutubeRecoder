@@ -41,17 +41,16 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songs = (ArrayList<Song>) getArguments().getSerializable("SONG_FROM_MAIN_TO_HOME");
+        Log.e("tieuhoan", "onCreate HomeFragment");
+
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, null);
-
-
         setUpRecycle(songs, view);
-
+        Log.e("tieuhoan", "onCreateView HomeFragment");
         return view;
     }
 
@@ -121,6 +120,15 @@ public class HomeFragment extends Fragment {
         });
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.e("tieuhoan", "setUserVisibleHint");
+            songs = (ArrayList<Song>) getArguments().getSerializable("SONG_FROM_MAIN_TO_HOME");
+        }
+    }
 }
 
 

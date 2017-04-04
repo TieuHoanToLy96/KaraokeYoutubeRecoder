@@ -68,6 +68,7 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
 
         fragments.add(MainApp.singersVietNam);
         fragmentTitles.add("Việt Nam");
+
         fragments.add(MainApp.singersGlobal);
         fragmentTitles.add("Âu Mỹ");
 
@@ -96,7 +97,6 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
-        Log.e("tieuhoan", "tab select ");
 
         for (int i = 0; i < fragments.size(); i++) {
             TextView view = (TextView) tabLayout.getTabAt(i);
@@ -107,39 +107,6 @@ public class ViewPageFragment extends Fragment implements ViewPager.OnPageChange
         view1.setTextColor(Color.BLACK);
 
         toolbar.setTitle(fragmentTitles.get(position));
-//
-//        switch (position) {
-//            case 0: {
-//                TextView view = (TextView) tabLayout.getTabAt(position);
-//                view.setTextColor(Color.BLACK);
-//                break;
-//            }
-//            case 1: {
-//                TextView view = (TextView) tabLayout.getTabAt(position);
-//                view.setTextColor(Color.BLACK);
-//                Bundle bundle = new Bundle();
-//                SQLiteHelper sqLiteHelper = new SQLiteHelper(getActivity());
-//                singers = sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM);
-//                for (Singer singer : sqLiteHelper.getAllSinger(SQLiteHelper.TABLESINGERVIETNAM)) {
-//                    Log.e("tieuhoan ", singer.getNameSinger());
-//                }
-//                bundle.putSerializable("SINGER_VIETNAM", singers);
-//                MainApp.singersVietNam.setArguments(bundle);
-//                break;
-//            }
-//            case 2: {
-//                TextView view = (TextView) tabLayout.getTabAt(position);
-//                view.setTextColor(Color.BLACK);
-//                break;
-//            }
-//
-//            case 3: {
-//                TextView view = (TextView) tabLayout.getTabAt(position);
-//                view.setTextColor(Color.BLACK);
-//                break;
-//            }
-
-//        }
     }
 
     @Override

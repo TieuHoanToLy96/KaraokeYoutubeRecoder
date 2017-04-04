@@ -153,29 +153,6 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         return true;
     }
 
-    int i = 0;
-    private int lastVisibleItem;
-
-//    @Override
-//    public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//    }
-
-//    @Override
-//    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//        if (lastVisibleItem < firstVisibleItem) {
-//            Log.i("SCROLLING DOWN", "TRUE");
-//            if (songsResult.size() >= (i + 10)) {
-//                new Json.LoadAdd(handler2, listView, getActivity()).execute();
-//                i = i + 10;
-//            }
-//        }
-//        if (lastVisibleItem > firstVisibleItem) {
-//            Log.i("SCROLLING UP", "TRUE");
-//        }
-//        lastVisibleItem = firstVisibleItem;
-//    }
-
     Handler handler2 = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -186,4 +163,15 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
             }
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releaseAll();
+    }
+
+    public void releaseAll() {
+        pathSearch = null;
+        songsResult.clear();
+    }
 }
